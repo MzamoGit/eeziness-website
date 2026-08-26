@@ -1,136 +1,17 @@
-.platform-section{
-  background:#f2f4f5;
-}
+.platform-section{background:#f2f4f5}.platform-card{position:relative;background:linear-gradient(110deg,rgba(179,138,59,.10),transparent 28%),linear-gradient(290deg,rgba(15,107,99,.10),transparent 32%),#f7f7f4;color:#26323d;border:1px solid #cfd5d8;border-top:5px solid #415768;border-radius:24px;box-shadow:0 18px 42px rgba(38,50,61,.10)}.platform-card:before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:linear-gradient(180deg,#415768 0 34%,#0f6b63 34% 67%,#b38a3b 67% 100%);border-radius:20px 0 0 20px}.platform-card:after{display:none}.platform-copy .eyebrow.light{color:#8a671f}.platform-copy h2{color:#202a33}.platform-lead{color:#56636d}.platform-tags span{background:#fff;color:#394852;border:1px solid #c9d0d4;box-shadow:none}.platform-tags span:nth-child(1){background:#edf1f4;border-color:#7b8e9b;color:#304858}.platform-tags span:nth-child(2){background:#f5f1e7;border-color:#b38a3b;color:#6f5420}.platform-tags span:nth-child(3){background:#e9f1ef;border-color:#4f8b84;color:#285f59}.platform-tags span:nth-child(4){background:#eef1f3;border-color:#697782;color:#3f4c55}.platform-tags span:nth-child(5){background:#f3f0e8;border-color:#9f8657;color:#604d29}.platform-tags span:nth-child(6){background:#ebf0f0;border-color:#66827e;color:#365652}
 
-.platform-card{
-  position:relative;
-  background:
-    linear-gradient(110deg,rgba(179,138,59,.10),transparent 28%),
-    linear-gradient(290deg,rgba(15,107,99,.10),transparent 32%),
-    #f7f7f4;
-  color:#26323d;
-  border:1px solid #cfd5d8;
-  border-top:5px solid #415768;
-  border-radius:24px;
-  box-shadow:0 18px 42px rgba(38,50,61,.10);
-}
+/* Header ownership note */
+.brand:after{content:"A Nasela Capital innovation";margin-left:10px;padding-left:10px;border-left:1px solid #d6dde2;color:#74818b;font-size:8px;font-weight:750;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+.ownership-strip{display:none!important}
 
-.platform-card:before{
-  content:"";
-  position:absolute;
-  inset:0 auto 0 0;
-  width:7px;
-  background:linear-gradient(180deg,#415768 0 34%,#0f6b63 34% 67%,#b38a3b 67% 100%);
-  border-radius:20px 0 0 20px;
-}
+/* More visual hero benefit cards */
+.trust-row{gap:10px}.trust-row>div{position:relative;min-height:118px;padding:54px 13px 12px!important;border:1px solid #dfe6eb!important;border-radius:15px;background:#fff;overflow:hidden;box-shadow:0 7px 20px rgba(16,34,61,.045)}.trust-row>div:before,.trust-row>div:after{content:"";position:absolute}.trust-row>div:nth-child(1):before{left:15px;top:16px;width:18px;height:18px;border:2px solid #355f7a;border-radius:5px;box-shadow:23px -7px 0 -1px #fff,23px -7px 0 1px #8fa4b2,23px 7px 0 -1px #fff,23px 7px 0 1px #8fa4b2}.trust-row>div:nth-child(1):after{left:66px;top:14px;width:28px;height:28px;border-radius:50%;background:#355f7a;box-shadow:0 5px 12px rgba(53,95,122,.18)}.trust-row>div:nth-child(2):before{left:15px;top:13px;width:34px;height:34px;border:2px solid #0f6b63;border-radius:50%;background:#eff7f5}.trust-row>div:nth-child(2):after{left:62px;top:13px;width:23px;height:30px;border:2px solid #a67c2e;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#fff}.trust-row>div:nth-child(3):before{left:17px;top:13px;width:22px;height:22px;border:2px solid #3d5363;border-radius:50%;box-shadow:47px 5px 0 1px #edf1f3,47px 5px 0 3px #71808d}.trust-row>div:nth-child(3):after{left:48px;top:18px;width:20px;height:20px;border-radius:50%;background:#a67c2e;box-shadow:0 0 0 5px #fff}.trust-row strong{font-size:12px!important}.trust-row span{font-size:10.5px!important;line-height:1.35}
 
-.platform-card:after{
-  display:none;
-}
+/* EeziManOS connected network */
+.platform-visual{position:relative;min-height:330px;background:#eef1f2;border:1px solid #cbd2d5;border-radius:20px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);overflow:hidden}.platform-visual:before,.platform-visual:after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px dashed #97a5ad;border-radius:50%;opacity:.7}.platform-visual:before{width:250px;height:250px}.platform-visual:after{width:180px;height:180px}.stack{position:absolute!important;left:auto!important;transform:none!important;width:116px!important;height:50px!important;border-radius:12px!important;display:grid!important;place-items:center!important;font-size:11px!important;font-weight:750!important;background:#fff!important;border:1px solid #bfc8cd!important;border-left-width:6px!important;box-shadow:0 7px 16px rgba(38,50,61,.07)!important;z-index:2}.s1{left:7%!important;top:13%!important;border-left-color:#46657a!important;color:#29495d!important}.s2{right:7%!important;top:13%!important;border-left-color:#a67c2e!important;color:#66501f!important}.s3{left:5%!important;bottom:18%!important;border-left-color:#2f766f!important;color:#245d57!important}.s4{right:5%!important;bottom:18%!important;border-left-color:#56636d!important;color:#36414a!important}.stack-core{position:absolute!important;left:50%!important;top:50%!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:165px!important;text-align:center;background:linear-gradient(135deg,#263844,#415768)!important;color:#fff!important;border:1px solid #263844!important;border-left:8px solid #b38a3b!important;border-radius:18px!important;padding:22px 16px!important;font-size:21px!important;font-weight:800!important;box-shadow:0 18px 38px rgba(38,50,61,.20)!important;z-index:3}.stack-core small{color:#dce4e8!important}.platform-visual .stack:nth-child(1):after,.platform-visual .stack:nth-child(2):after,.platform-visual .stack:nth-child(3):after,.platform-visual .stack:nth-child(4):after{content:"";position:absolute;height:1px;width:76px;background:#9aa7af;top:50%;opacity:.75}.platform-visual .stack:nth-child(1):after,.platform-visual .stack:nth-child(3):after{left:100%}.platform-visual .stack:nth-child(2):after,.platform-visual .stack:nth-child(4):after{right:100%}
 
-.platform-copy .eyebrow.light{
-  color:#8a671f;
-}
+/* Add founder's name without changing the underlying copy */
+.about-copy p:nth-of-type(2):before{content:"Mzamo Khuzwayo — ";font-weight:700;color:#25364a}
 
-.platform-copy h2{
-  color:#202a33;
-}
-
-.platform-lead{
-  color:#56636d;
-}
-
-.platform-tags span{
-  background:#ffffff;
-  color:#394852;
-  border:1px solid #c9d0d4;
-  box-shadow:none;
-}
-
-.platform-tags span:nth-child(1){
-  background:#edf1f4;
-  border-color:#7b8e9b;
-  color:#304858;
-}
-.platform-tags span:nth-child(2){
-  background:#f5f1e7;
-  border-color:#b38a3b;
-  color:#6f5420;
-}
-.platform-tags span:nth-child(3){
-  background:#e9f1ef;
-  border-color:#4f8b84;
-  color:#285f59;
-}
-.platform-tags span:nth-child(4){
-  background:#eef1f3;
-  border-color:#697782;
-  color:#3f4c55;
-}
-.platform-tags span:nth-child(5){
-  background:#f3f0e8;
-  border-color:#9f8657;
-  color:#604d29;
-}
-.platform-tags span:nth-child(6){
-  background:#ebf0f0;
-  border-color:#66827e;
-  color:#365652;
-}
-
-.platform-visual{
-  background:#eef1f2;
-  border:1px solid #cbd2d5;
-  border-radius:20px;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
-}
-
-.stack{
-  color:#26323d;
-  background:#fff;
-  border:1px solid #bfc8cd;
-  border-left-width:6px;
-  box-shadow:0 7px 16px rgba(38,50,61,.07);
-}
-
-.s1{
-  background:#eef2f5;
-  border-color:#46657a;
-  color:#29495d;
-}
-.s2{
-  background:#f4f0e7;
-  border-color:#a67c2e;
-  color:#66501f;
-}
-.s3{
-  background:#e9f0ee;
-  border-color:#2f766f;
-  color:#245d57;
-}
-.s4{
-  background:#eceff1;
-  border-color:#56636d;
-  color:#36414a;
-}
-
-.stack-core{
-  background:linear-gradient(135deg,#f8f8f5,#eef1f2);
-  color:#202a33;
-  border:1px solid #b9c1c6;
-  border-left:8px solid #b38a3b;
-  box-shadow:0 16px 34px rgba(38,50,61,.12);
-}
-
-.stack-core small{
-  color:#5d6971;
-}
-
-@media(max-width:740px){
-  .platform-card{
-    padding:30px 20px;
-  }
-  .platform-card:before{
-    width:5px;
-  }
-}
+@media(max-width:1020px){.brand:after{display:none}}
+@media(max-width:740px){.platform-card{padding:30px 20px}.platform-card:before{width:5px}.platform-visual{min-height:360px}.stack{width:104px!important}.s1{left:4%!important}.s2{right:4%!important}.s3{left:3%!important}.s4{right:3%!important}.platform-visual .stack:after{display:none}.trust-row>div{min-height:105px}}
