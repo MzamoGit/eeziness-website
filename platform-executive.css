@@ -1,0 +1,136 @@
+.platform-section{
+  background:#f2f4f5;
+}
+
+.platform-card{
+  position:relative;
+  background:
+    linear-gradient(110deg,rgba(179,138,59,.10),transparent 28%),
+    linear-gradient(290deg,rgba(15,107,99,.10),transparent 32%),
+    #f7f7f4;
+  color:#26323d;
+  border:1px solid #cfd5d8;
+  border-top:5px solid #415768;
+  border-radius:24px;
+  box-shadow:0 18px 42px rgba(38,50,61,.10);
+}
+
+.platform-card:before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:7px;
+  background:linear-gradient(180deg,#415768 0 34%,#0f6b63 34% 67%,#b38a3b 67% 100%);
+  border-radius:20px 0 0 20px;
+}
+
+.platform-card:after{
+  display:none;
+}
+
+.platform-copy .eyebrow.light{
+  color:#8a671f;
+}
+
+.platform-copy h2{
+  color:#202a33;
+}
+
+.platform-lead{
+  color:#56636d;
+}
+
+.platform-tags span{
+  background:#ffffff;
+  color:#394852;
+  border:1px solid #c9d0d4;
+  box-shadow:none;
+}
+
+.platform-tags span:nth-child(1){
+  background:#edf1f4;
+  border-color:#7b8e9b;
+  color:#304858;
+}
+.platform-tags span:nth-child(2){
+  background:#f5f1e7;
+  border-color:#b38a3b;
+  color:#6f5420;
+}
+.platform-tags span:nth-child(3){
+  background:#e9f1ef;
+  border-color:#4f8b84;
+  color:#285f59;
+}
+.platform-tags span:nth-child(4){
+  background:#eef1f3;
+  border-color:#697782;
+  color:#3f4c55;
+}
+.platform-tags span:nth-child(5){
+  background:#f3f0e8;
+  border-color:#9f8657;
+  color:#604d29;
+}
+.platform-tags span:nth-child(6){
+  background:#ebf0f0;
+  border-color:#66827e;
+  color:#365652;
+}
+
+.platform-visual{
+  background:#eef1f2;
+  border:1px solid #cbd2d5;
+  border-radius:20px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
+}
+
+.stack{
+  color:#26323d;
+  background:#fff;
+  border:1px solid #bfc8cd;
+  border-left-width:6px;
+  box-shadow:0 7px 16px rgba(38,50,61,.07);
+}
+
+.s1{
+  background:#eef2f5;
+  border-color:#46657a;
+  color:#29495d;
+}
+.s2{
+  background:#f4f0e7;
+  border-color:#a67c2e;
+  color:#66501f;
+}
+.s3{
+  background:#e9f0ee;
+  border-color:#2f766f;
+  color:#245d57;
+}
+.s4{
+  background:#eceff1;
+  border-color:#56636d;
+  color:#36414a;
+}
+
+.stack-core{
+  background:linear-gradient(135deg,#f8f8f5,#eef1f2);
+  color:#202a33;
+  border:1px solid #b9c1c6;
+  border-left:8px solid #b38a3b;
+  box-shadow:0 16px 34px rgba(38,50,61,.12);
+}
+
+.stack-core small{
+  color:#5d6971;
+}
+
+@media(max-width:740px){
+  .platform-card{
+    padding:30px 20px;
+  }
+  .platform-card:before{
+    width:5px;
+  }
+}
