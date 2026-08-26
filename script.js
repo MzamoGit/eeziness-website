@@ -33,7 +33,7 @@ if (hero && !document.querySelector('.ownership-strip')) {
 
 const footerBottom = document.querySelector('.footer-bottom');
 if (footerBottom) {
-  footerBottom.innerHTML = `© ${new Date().getFullYear()} Nasela Capital (Pty) Ltd. Eeziness and the Eezi product family are products of Nasela Capital.`;
+  footerBottom.innerHTML = `© ${new Date().getFullYear()} Nasela Capital (Pty) Ltd. EeziNess and the Eezi product family are products of Nasela Capital.`;
 }
 
 const siteTreatment = document.createElement('style');
