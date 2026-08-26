@@ -362,3 +362,9 @@ h1 span{
   .s4{grid-column:2!important;grid-row:2!important}
   .stack-core{grid-column:1/-1!important;grid-row:3!important}
 }
+
+
+/* EeziNess brand wordmark */
+.brand-ness{color:#f58220!important}
+.brand .brand-ness,.mini-brand .brand-ness,.footer-brand .brand-ness{color:#f58220!important}
+.eyebrow .brand-ness{color:#f58220!important}
