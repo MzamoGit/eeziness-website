@@ -1,0 +1,28 @@
+.card-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:auto;
+  padding-top:2px;
+}
+.card-actions .card-link{
+  margin-top:0;
+  padding-top:0;
+}
+.video-link{
+  color:#b42318 !important;
+  white-space:nowrap;
+}
+.video-link::before{
+  content:"▶";
+  font-size:10px;
+  margin-right:6px;
+}
+@media(max-width:740px){
+  .card-actions{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:7px;
+  }
+}
