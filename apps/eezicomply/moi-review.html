@@ -35,7 +35,9 @@
 <div class="panel"><h2>Key governance map</h2><div id="governanceMap" class="grid"></div></div>
 <div class="panel"><h2>Findings</h2><div id="findings"></div></div>
 <div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
+<div class="panel"><div class="eyebrow">RECOMMENDED CHANGES</div><h2>Review and accept changes</h2><p class="muted">EeziComply will only use changes you accept when preparing the revised MOI. Reject a recommendation if you do not want it incorporated, or add a note for the drafting step.</p><div id="proposedChanges"></div><div class="actions"><button id="generateRevised" class="primary hidden">Generate revised MOI & next-step checklist</button></div><div id="revisionMsg"></div></div>
 <div class="panel"><h2>Questions for the company</h2><ul id="questions"></ul></div>
+<div id="revisionPanel" class="panel hidden"><div class="eyebrow">REVISED GOVERNING DOCUMENT</div><h2>Revised MOI</h2><p class="muted">Prepared from the original MOI and only the changes you accepted.</p><pre id="revisedMoi" style="white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;line-height:1.55"></pre><h2>What to do next</h2><div id="nextSteps"></div></div>
 </section>
 </main>
 
@@ -64,13 +66,15 @@ $('runReview').onclick=async()=>{
    $('reviewMsg').innerHTML=msg('info','EeziComply is reviewing the document…');
    const fn=await sb.functions.invoke('eezicomply-review-moi',{body:{review_id:review.id}});if(fn.error)throw fn.error;
    if(fn.data?.error)throw new Error(fn.data.error);
-   render(fn.data.result);
+   render(fn.data.result,review.id);
    $('reviewMsg').innerHTML=msg('success','MOI Review complete.');
  }catch(e){$('reviewMsg').innerHTML=msg('error',esc(e.message||e))}
  finally{$('runReview').disabled=false}
 };
 
-function render(r){
+let currentReviewId=null;
+function render(r,reviewId){
+ currentReviewId=reviewId||currentReviewId;
  $('resultPanel').classList.remove('hidden');
  $('assessmentTitle').textContent=String(r.overall_assessment||'').replaceAll('_',' ');
  $('summary').textContent=r.executive_summary||'';
