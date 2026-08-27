@@ -65,7 +65,9 @@ Deno.serve(async(req:Request)=>{
 Prepare a COMPLETE revised Memorandum of Incorporation, not a list of amendments.
 
 MANDATORY DRAFTING RULES:
-- Use the original MOI as the base document.
+- First inspect review.review_mode and review.detected_form supplied in the case data.
+- If review_mode is short_form_suitability and the source is CoR 15.1A or CoR 15.1C, DO NOT pretend to edit the prescribed short-form template. Prepare a COMPLETE customised/replacement MOI that carries forward the company's established facts and incorporates only the accepted bespoke governance changes. The output must clearly state that it is a working replacement/customised MOI for professional review and the appropriate amendment/substitution process.
+- Otherwise, use the original MOI as the base document.
 - Incorporate ONLY the changes expressly accepted by the user.
 - Do not silently add rejected changes, pending changes, or your own preferred governance drafting.
 - Preserve unaffected clauses and the document's internal structure as far as practical.
@@ -81,7 +83,7 @@ Cover, where applicable:
 1. Internal verification of the revised draft.
 2. Board/shareholder approvals required by the existing MOI and Companies Act.
 3. Preparation and signature of resolutions or notices.
-4. Whether a CIPC MOI amendment/substitution filing is required.
+4. Whether a CIPC MOI amendment/substitution filing is required. For a prescribed short-form MOI moving to bespoke governance, explain that a proper replacement/substitution process is required rather than simply editing the prescribed form.
 5. Which CIPC forms/supporting documents may be relevant, but never invent a form number if uncertain.
 6. Signature/execution requirements.
 7. Filing sequence and what evidence/confirmation to retain.
@@ -98,6 +100,10 @@ GLOBAL PROFESSIONAL-REVIEW RULE:
 - Keep the recommendation proportionate and specific; do not use generic disclaimers as a substitute for substantive guidance.`,
     input:[{role:'user',content:[
       {type:'input_text',text:`Company: ${review.organisation_name||'Not supplied'}
+Review mode: ${review.review_mode||'customised_moi_review'}
+Detected form: ${review.detected_form||'unknown'}
+Short-form suitability assessment: ${JSON.stringify(review.short_form_assessment_json||{})}
+
 Accepted changes:
 ${accepted.map((d:any)=>`- ${d.change_key} | ${d.title} | Clause ${d.clause_reference||'not identified'} | Proposed change: ${d.proposed_change} | User note: ${d.user_note||''}`).join('\n')}
 
