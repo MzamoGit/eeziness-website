@@ -278,7 +278,7 @@ Deno.serve(async(req)=>{
         if(up.error) throw up.error;
         const display=`${company} - ${item.title} - v${version}.${ext}`;
         const {data:row,error:ie}=await a.from("eezicomply_governance_outputs").insert({
-          owner_id:user.id,review_type:reviewType,review_id:reviewId,document_kind:item.kind,file_format:fmt,
+          owner_id:user.id,company_id:review.company_id||null,review_type:reviewType,review_id:reviewId,document_kind:item.kind,file_format:fmt,
           display_name:display,storage_path:path,mime_type:mime,version,is_current:true,
           document_status:"professional_review_required",professional_review_required:true,
           metadata:{company,title:item.title,generated_at:nowIso()}
