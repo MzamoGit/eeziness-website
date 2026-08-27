@@ -353,3 +353,17 @@ h3{letter-spacing:-.025em}
   .procurement-callout{grid-template-columns:1fr}
   .specialist-grid{grid-template-columns:1fr}
 }
+
+
+/* Hero sequencing: Why before products */
+.hero-actions{margin-top:28px}
+.hero-actions .btn-primary{min-width:170px}
+.btn-answer{
+  margin-top:18px;
+  min-height:44px;
+  background:#fff;
+  color:#173f70;
+  border:1px solid #fff;
+  font-size:12.5px
+}
+.btn-answer:hover{background:#f5f8fb}
