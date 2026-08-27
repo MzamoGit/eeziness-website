@@ -75,10 +75,11 @@ Deno.serve(async(req:Request)=>{
           why_it_matters:{type:'string'},
           companies_act_position:{type:'string'},
           recommendation:{type:'string'},
+          professional_review_recommendation:{type:'string'},
           recommended_action:{type:'string'},
           amendment_likely_required:{type:'boolean'},
           professional_verification_required:{type:'boolean'}
-        },required:['title','category','classification','severity','clause_reference','current_position','chatgpt_comment','why_it_matters','companies_act_position','recommendation','recommended_action','amendment_likely_required','professional_verification_required']}},
+        },required:['title','category','classification','severity','clause_reference','current_position','chatgpt_comment','why_it_matters','companies_act_position','recommendation','professional_review_recommendation','recommended_action','amendment_likely_required','professional_verification_required']}},
         key_governance_map:{type:'object',additionalProperties:false,properties:{
           board_appointment_and_removal:{type:'string'},
           board_powers:{type:'string'},
@@ -103,8 +104,9 @@ Deno.serve(async(req:Request)=>{
           reason:{type:'string'},
           classification:{type:'string',enum:['required','recommended','optional']},
           priority:{type:'string',enum:['high','medium','low']},
-          professional_verification_required:{type:'boolean'}
-        },required:['change_key','title','clause_reference','current_position','proposed_change','reason','classification','priority','professional_verification_required']}},
+          professional_verification_required:{type:'boolean'},
+          professional_review_recommendation:{type:'string'}
+        },required:['change_key','title','clause_reference','current_position','proposed_change','reason','classification','priority','professional_verification_required','professional_review_recommendation']}},
         questions_for_company:{type:'array',items:{type:'string'}},
         limitations:{type:'array',items:{type:'string'}}
       },
@@ -126,6 +128,7 @@ STRICT RULES:
 - Write the review in the same standard a strong ChatGPT professional review would use: natural, analytical, nuanced and specific rather than checklist-like.
 - For every material finding, include a substantive "chatgpt_comment" explaining what you notice in the drafting, how you interpret it, and the practical significance.
 - For every material finding, include a "recommendation" written as direct professional advice to the company, not merely a system action label.
+- For EVERY substantive finding and EVERY proposed change, include a professional_review_recommendation telling the user to have the advice/change reviewed by an appropriately qualified professional before relying on, adopting or filing it. Name the most relevant type of professional where practical (for example legal, tax, accounting, company-secretarial or governance).
 - Explain the practical consequence in plain language.
 - Use the MOI's own clause/page references wherever possible.
 - Never invent a Companies Act section number. Cite a section number only when you are confident. If uncertain, state the Companies Act principle without fabricating a citation and mark professional verification required.
@@ -133,6 +136,7 @@ STRICT RULES:
 - This is NOT an MOI-versus-shareholders-agreement comparison. Do not infer SHA terms.
 - The output must say when an issue probably requires amendment versus when the company merely needs to understand the chosen governance position.
 - Recommend qualified legal/professional review for material legal conclusions, but do not make the entire output useless by disclaiming everything.
+- This professional-review rule is mandatory even where the issue appears low-risk or the recommendation is only a governance improvement. Keep it proportionate and concise.
 - Do not merely repeat clause wording. Add judgement, context and practical interpretation.
 - Where a clause is acceptable but unusual, say so explicitly and explain the trade-off rather than manufacturing a problem.
 - Where several clauses interact, comment on the combined effect.
