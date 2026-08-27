@@ -52,8 +52,9 @@ Deno.serve(async(req:Request)=>{
       evidence_to_keep:{type:'array',items:{type:'string'}},
       completion_test:{type:'string'}
     },required:['title','explanation','actions','responsible_person','evidence_to_keep','completion_test']}},
-    cautions:{type:'array',items:{type:'string'}}
-  },required:['revised_moi','drafting_note','accepted_change_summary','next_steps','cautions']};
+    cautions:{type:'array',items:{type:'string'}},
+    professional_review_recommendation:{type:'string'}
+  },required:['revised_moi','drafting_note','accepted_change_summary','next_steps','cautions','professional_review_recommendation']};
 
   const ai=new OpenAI({apiKey:key});
   const response=await ai.responses.create({
@@ -90,7 +91,11 @@ Cover, where applicable:
 11. Communicating material governance changes to directors/shareholders and relevant stakeholders.
 12. Any post-filing compliance calendar actions.
 Each checklist item must explain WHY it is needed, exactly WHAT the user should do, WHO should do it, what evidence to keep, and how the user knows the step is complete.
-Do not treat professional review as a substitute for giving practical guidance.`,
+Do not treat professional review as a substitute for giving practical guidance.
+GLOBAL PROFESSIONAL-REVIEW RULE:
+- Every substantive drafting recommendation and every next-step instruction must be framed so the user is also advised to obtain review by an appropriately qualified professional before relying on, adopting, signing or filing it.
+- The final output must include one clear professional_review_recommendation identifying the most relevant professional review required for the revised MOI and implementation steps.
+- Keep the recommendation proportionate and specific; do not use generic disclaimers as a substitute for substantive guidance.`,
     input:[{role:'user',content:[
       {type:'input_text',text:`Company: ${review.organisation_name||'Not supplied'}
 Accepted changes:
