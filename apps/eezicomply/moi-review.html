@@ -30,6 +30,16 @@
 <div id="reviewMsg"></div>
 </section>
 
+<section id="shortFormPanel" class="panel hidden">
+<div class="eyebrow">STANDARD SHORT-FORM MOI DETECTED</div>
+<h2 id="shortFormTitle"></h2>
+<p id="shortFormIntro" class="summary"></p>
+<p class="muted">Rather than criticising the prescribed form for being simple, EeziComply will assess whether it is still suitable for the way your organisation is owned and governed.</p>
+<div id="shortFormQuestions"></div>
+<div class="actions"><button id="assessShortForm" class="primary">Assess suitability</button></div>
+<div id="shortFormMsg"></div>
+</section>
+
 <section id="resultPanel" class="hidden">
 <div class="panel"><div class="eyebrow">EXECUTIVE REVIEW</div><h2 id="assessmentTitle"></h2><p id="summary" class="summary"></p><h3>EeziComply commentary</h3><p id="overallCommentary"></p><h3>Recommended way forward</h3><p id="overallRecommendation"></p></div>
 <div class="panel"><h2>Key governance map</h2><div id="governanceMap" class="grid"></div></div>
@@ -66,13 +76,21 @@ $('runReview').onclick=async()=>{
    $('reviewMsg').innerHTML=msg('info','EeziComply is reviewing the document…');
    const fn=await sb.functions.invoke('eezicomply-review-moi',{body:{review_id:review.id}});if(fn.error)throw fn.error;
    if(fn.data?.error)throw new Error(fn.data.error);
-   render(fn.data.result,review.id);
-   $('reviewMsg').innerHTML=msg('success','MOI Review complete.');
+   if(fn.data.short_form_detected){
+     currentReviewId=review.id;
+     currentShortFormQuestions=fn.data.questions||[];
+     renderShortForm(fn.data);
+     $('reviewMsg').innerHTML=msg('success','Standard short-form MOI detected. Complete the suitability questions below.');
+   }else{
+     render(fn.data.result,review.id);
+     $('reviewMsg').innerHTML=msg('success','MOI Review complete.');
+   }
  }catch(e){$('reviewMsg').innerHTML=msg('error',esc(e.message||e))}
  finally{$('runReview').disabled=false}
 };
 
 let currentReviewId=null;
+let currentShortFormQuestions=[];
 function render(r,reviewId){
  currentReviewId=reviewId||currentReviewId;
  $('resultPanel').classList.remove('hidden');
@@ -89,6 +107,84 @@ function render(r,reviewId){
  document.querySelectorAll('.decisionBtn').forEach(b=>b.onclick=()=>saveDecision(b.dataset.key,b.dataset.decision));
  if(changes.length)$('generateRevised').classList.remove('hidden');
  $('questions').innerHTML=(r.questions_for_company||[]).map(q=>'<li>'+esc(q)+'</li>').join('')||'<li>No further questions identified.</li>';
+ $('resultPanel').scrollIntoView({behavior:'smooth'});
+}
+
+function renderShortForm(data){
+ $('resultPanel').classList.add('hidden');
+ $('shortFormPanel').classList.remove('hidden');
+ $('shortFormTitle').textContent=(data.form_name||'Standard short-form MOI')+' detected';
+ $('shortFormIntro').textContent=data.result?.executive_summary||'EeziComply detected a prescribed short-form MOI.';
+ $('shortFormQuestions').innerHTML=(data.questions||[]).map((q,i)=>{
+   const id='sf_'+q.key;
+   if(q.answer_type==='yes_no') return '<div class="field"><label>'+(i+1)+'. '+esc(q.question)+'</label><select id="'+esc(id)+'" data-key="'+esc(q.key)+'" style="width:100%;padding:11px 12px;border:1px solid #cbd4df;border-radius:9px;font:inherit"><option value="">Select</option><option value="Yes">Yes</option><option value="No">No</option></select></div>';
+   return '<div class="field"><label>'+(i+1)+'. '+esc(q.question)+'</label><input id="'+esc(id)+'" data-key="'+esc(q.key)+'" type="'+(q.answer_type==='number'?'number':'text')+'"></div>';
+ }).join('');
+ $('shortFormPanel').scrollIntoView({behavior:'smooth'});
+}
+
+$('assessShortForm').onclick=async()=>{
+ if(!currentReviewId)return;
+ const answers={};
+ let missing=false;
+ currentShortFormQuestions.forEach(q=>{
+   const el=document.querySelector('[data-key="'+CSS.escape(q.key)+'"]');
+   const value=el?.value?.trim?.()||'';
+   if(!value)missing=true;
+   answers[q.key]=value;
+ });
+ if(missing){$('shortFormMsg').innerHTML=msg('error','Please answer all the suitability questions.');return}
+ $('assessShortForm').disabled=true;
+ $('shortFormMsg').innerHTML=msg('info','Assessing whether the standard MOI is still suitable…');
+ try{
+   const fn=await sb.functions.invoke('eezicomply-assess-short-form-moi',{body:{review_id:currentReviewId,answers}});
+   if(fn.error)throw fn.error;
+   if(fn.data?.error)throw new Error(fn.data.error);
+   $('shortFormPanel').classList.add('hidden');
+   renderShortFormResult(fn.data.result,currentReviewId);
+   $('shortFormMsg').innerHTML='';
+ }catch(e){
+   $('shortFormMsg').innerHTML=msg('error',esc(e.message||e));
+ }finally{
+   $('assessShortForm').disabled=false;
+ }
+};
+
+function renderShortFormResult(r,reviewId){
+ currentReviewId=reviewId;
+ $('resultPanel').classList.remove('hidden');
+ $('assessmentTitle').textContent=String(r.suitability_outcome||'').replaceAll('_',' ');
+ $('summary').textContent=r.executive_summary||'';
+ $('overallCommentary').textContent=r.overall_commentary||'';
+ $('overallRecommendation').textContent=r.overall_recommendation||'';
+
+ const profile=r.standard_moi_profile||{};
+ $('governanceMap').innerHTML=
+   '<div class="map-card"><b>Detected form</b><span>'+esc(profile.detected_form||'')+'</span></div>'+
+   '<div class="map-card"><b>What it means</b><span>'+esc(profile.what_it_means||'')+'</span></div>'+
+   '<div class="map-card"><b>Why it may be suitable</b><span>'+esc(profile.why_it_may_be_suitable||'')+'</span></div>'+
+   '<div class="map-card"><b>What it does not customise</b><span>'+esc((profile.what_it_does_not_customise||[]).join('; '))+'</span></div>';
+
+ $('findings').innerHTML=(r.findings||[]).map(f=>'<article class="finding" data-severity="'+esc(f.severity)+'"><div class="finding-head"><h3>'+esc(f.title)+'</h3><span class="pill">'+esc(f.classification.replaceAll('_',' '))+' · '+esc(f.severity)+'</span></div><p><b>EeziComply comment:</b> '+esc(f.chatgpt_comment||'')+'</p><p><b>Why it matters:</b> '+esc(f.why_it_matters||'')+'</p><p><b>Recommendation:</b> '+esc(f.recommendation||'')+'</p><p><b>Professional review:</b> '+esc(f.professional_review_recommendation||'Have this recommendation reviewed by an appropriately qualified professional.')+'</p></article>').join('');
+
+ $('priorities').innerHTML=(r.priority_actions||[]).map(p=>'<div class="priority"><span>'+esc(p.priority)+'</span><div><b>'+esc(p.action)+'</b><br><small>'+esc(p.reason)+'</small></div></div>').join('');
+
+ const changes=r.proposed_changes||[];
+ $('proposedChanges').innerHTML=changes.map(c=>'<article class="finding"><div class="finding-head"><h3>'+esc(c.title)+'</h3><span class="pill">'+esc(c.classification)+' · '+esc(c.priority)+'</span></div><p><b>Current position:</b> '+esc(c.current_position)+'</p><p><b>Recommended bespoke change:</b> '+esc(c.proposed_change)+'</p><p><b>Why:</b> '+esc(c.reason)+'</p><p><b>Professional review:</b> '+esc(c.professional_review_recommendation)+'</p><div class="actions"><button class="primary decisionBtn" data-key="'+esc(c.change_key)+'" data-decision="accepted">Accept</button><button class="secondary decisionBtn" data-key="'+esc(c.change_key)+'" data-decision="rejected">Reject</button></div><div class="field"><label>Optional note</label><input class="decisionNote" data-key="'+esc(c.change_key)+'" placeholder="Add context for the replacement MOI"></div><div class="status info hidden" id="decision_'+esc(c.change_key)+'"></div></article>').join('');
+
+ document.querySelectorAll('.decisionBtn').forEach(b=>b.onclick=()=>saveDecision(b.dataset.key,b.dataset.decision));
+
+ if(changes.length){
+   $('generateRevised').textContent='Generate customised replacement MOI & next-step checklist';
+   $('generateRevised').classList.remove('hidden');
+ }else{
+   $('generateRevised').classList.add('hidden');
+   $('proposedChanges').innerHTML='<div class="status success"><strong>Recommendation: retain the standard MOI.</strong><br>'+esc(r.overall_recommendation||'')+'<br><br><strong>Professional review:</strong> Have this conclusion reviewed by an appropriately qualified legal or company-secretarial professional before relying on it.</div>';
+ }
+
+ const triggers=r.trigger_events_for_future_review||[];
+ const alignment=r.alignment_review_recommended?'<li><strong>MOI ↔ SHA Alignment Review:</strong> '+esc(r.alignment_review_reason||'Recommended because a Shareholders’ Agreement may contain governance rights that should be checked against the MOI.')+'</li>':'';
+ $('questions').innerHTML=alignment+triggers.map(t=>'<li>Review the MOI again if: '+esc(t)+'</li>').join('')||'<li>No immediate further questions identified.</li>';
  $('resultPanel').scrollIntoView({behavior:'smooth'});
 }
 
