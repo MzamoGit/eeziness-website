@@ -47,6 +47,14 @@
 <div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
 <div class="panel"><div class="eyebrow">RECOMMENDED CHANGES</div><h2>Review and accept changes</h2><p class="muted">EeziComply will only use changes you accept when preparing the revised MOI. Reject a recommendation if you do not want it incorporated, or add a note for the drafting step.</p><div id="proposedChanges"></div><div class="actions"><button id="generateRevised" class="primary hidden">Generate revised MOI & next-step checklist</button></div><div id="revisionMsg"></div></div>
 <div class="panel"><h2>Questions for the company</h2><ul id="questions"></ul></div>
+<div id="professionalOutputsPanel" class="panel hidden">
+<div class="eyebrow">PROFESSIONAL OUTPUTS</div>
+<h2>Download professional documents</h2>
+<p class="muted">Generate a version-controlled EeziComply output pack. Word files are editable working documents; PDFs provide a stable reference copy. All outputs are marked Professional Review Required until appropriately reviewed.</p>
+<div class="actions"><button id="generateProfessionalOutputs" class="primary">Generate Word & PDF outputs</button></div>
+<div id="professionalOutputsMsg"></div>
+<div id="professionalOutputsList"></div>
+</div>
 <div id="revisionPanel" class="panel hidden"><div class="eyebrow">REVISED GOVERNING DOCUMENT</div><h2>Revised MOI</h2><p class="muted">Prepared from the original MOI and only the changes you accepted.</p><div id="professionalReview" class="notice"></div><pre id="revisedMoi" style="white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;line-height:1.55"></pre><h2>What to do next</h2><div id="nextSteps"></div></div>
 </section>
 </main>
@@ -93,7 +101,7 @@ let currentReviewId=null;
 let currentShortFormQuestions=[];
 function render(r,reviewId){
  currentReviewId=reviewId||currentReviewId;
- $('resultPanel').classList.remove('hidden');
+ $('resultPanel').classList.remove('hidden'); $('professionalOutputsPanel')?.classList.remove('hidden');
  $('assessmentTitle').textContent=String(r.overall_assessment||'').replaceAll('_',' ');
  $('summary').textContent=r.executive_summary||'';
  $('overallCommentary').textContent=r.overall_commentary||'';
@@ -225,6 +233,31 @@ $('generateRevised').onclick=async()=>{
    $('generateRevised').disabled=false;
  }
 };
+
+
+async function generateProfessionalOutputsPack(){
+ if(!currentReviewId){$('professionalOutputsMsg').innerHTML=msg('error','Complete a review first.');return}
+ $('generateProfessionalOutputs').disabled=true;
+ $('professionalOutputsMsg').innerHTML=msg('info','Generating professional Word and PDF outputs…');
+ try{
+   const fn=await sb.functions.invoke('eezicomply-generate-governance-outputs',{body:{review_type:'moi',review_id:currentReviewId}});
+   if(fn.error)throw fn.error;
+   if(fn.data?.error)throw new Error(fn.data.error);
+   const files=fn.data?.generated||[];
+   const byKind={};
+   files.forEach(x=>{(byKind[x.document_kind]??=[]).push(x)});
+   const kindLabel={review_report:'Review Report',implementation_checklist:'Implementation Checklist',revised_moi:'Revised MOI - Working Draft',revised_sha:"Revised Shareholders' Agreement - Working Draft"};
+   $('professionalOutputsList').innerHTML=Object.entries(byKind).map(([kind,items])=>{
+      return '<div class="finding"><h3>'+esc(kindLabel[kind]||kind)+'</h3><div class="actions">'+items.map(x=>'<a class="secondary btn" href="'+esc(x.download_url)+'" target="_blank" rel="noopener">Download '+esc(String(x.file_format||'').toUpperCase())+' · v'+esc(x.version)+'</a>').join('')+'</div><p class="muted">Status: Professional Review Required</p></div>';
+   }).join('')||'<p class="muted">No output files were generated.</p>';
+   $('professionalOutputsMsg').innerHTML=msg('success','Professional outputs generated and stored in the EeziComply company record.');
+ }catch(e){
+   $('professionalOutputsMsg').innerHTML=msg('error',esc(e.message||e));
+ }finally{
+   $('generateProfessionalOutputs').disabled=false;
+ }
+}
+$('generateProfessionalOutputs').onclick=generateProfessionalOutputsPack;
 
 (async()=>{const {data:{session}}=await sb.auth.getSession();if(session)showSignedIn(session.user)})();
 </script>
