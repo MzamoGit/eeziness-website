@@ -27,6 +27,40 @@
 @media(max-width:900px){.roadmap-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.roadmap-grid{grid-template-columns:1fr}.roadmap-head h2{font-size:25px}}
 
+
+.company-home{padding-top:34px;padding-bottom:60px}
+.company-home-head{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:24px;align-items:start;margin-bottom:24px}
+.company-home-head h1{font-size:38px;margin:8px 0 12px}
+.company-picker-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 14px #1024450b}
+.company-picker-card label{display:block;font-size:12px;font-weight:800;color:#344054;margin-bottom:12px}
+.company-picker-card select{width:100%;margin-top:6px;padding:11px 12px;border:1px solid #cbd4df;border-radius:9px;font:inherit;background:#fff}
+.company-overview{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:12px;margin:18px 0 30px}
+.overview-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;min-height:105px}
+.overview-card strong{display:block;color:var(--navy);font-size:20px;margin-top:6px}
+.overview-card span{font-size:12px;color:var(--muted)}
+.workspace-section-head{display:flex;justify-content:space-between;align-items:end;margin:14px 0}
+.workspace-section-head h2{margin:4px 0 0;font-size:27px}
+.service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.service-tile{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:0 3px 12px #10244508;display:flex;flex-direction:column;min-height:235px}
+.service-tile.live{border-top:5px solid var(--green)}
+.service-tile h3{font-size:18px;margin:12px 0 7px}
+.service-tile p{color:var(--muted);font-size:13px;flex:1}
+.service-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.service-status{font-size:10px;font-weight:800;letter-spacing:.05em;padding:4px 7px;border-radius:999px;background:#eef2f6;color:#475467}
+.service-status.live{background:#e9f8ef;color:#17623f}
+.service-status.dev{background:#edf5ff;color:#245b98}
+.service-status.soon{background:#fff6df;color:#8a641d}
+.service-status.specialist{background:#eaf8f6;color:#0d6d64}
+.service-meta{font-size:11px;color:var(--muted);text-align:right}
+.service-tile.coming{background:#fafbfc}
+.npo-tile{border-top:5px solid #0d7e72}
+.company-record-panel{margin-top:24px}
+.record-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.record-item{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:12px}
+.record-item b{display:block;color:var(--navy);margin-bottom:4px}
+@media(max-width:900px){.company-home-head{grid-template-columns:1fr}.company-overview{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}.record-summary{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.company-home{padding-top:20px}.company-home-head h1{font-size:31px}.company-overview,.service-grid,.record-summary{grid-template-columns:1fr}.service-tile{min-height:auto}}
+
 </style>
 </head>
 <body>
@@ -75,9 +109,80 @@
   </section>
 
   <section id="appView" class="hidden">
-    <div class="wrap app-shell">
-      <aside class="sidebar"><div class="case-summary"><div class="smallcaps">CURRENT CASE</div><strong id="caseName">New assessment</strong><span id="caseReg"></span></div><div class="case-switcher"><label>Switch filing<select id="caseSwitcher"><option value="">Loading saved filings…</option></select></label></div><nav id="stepNav"></nav><button class="secondary full" id="newCaseBtn">Start another assessment</button></aside>
+    <div id="companyHome" class="wrap company-home hidden">
+      <div class="company-home-head">
+        <div>
+          <div class="eyebrow">YOUR EEZICOMPLY WORKSPACE</div>
+          <h1>Company Secretary in your pocket.</h1>
+          <p class="lead">Choose a company once, then use the company-secretarial, governance and compliance services around the same company record.</p>
+        </div>
+        <div class="company-picker-card">
+          <label>Current company<select id="companyHomeSelect"><option value="">Loading companies…</option></select></label>
+          <button id="addCompanyHomeBtn" class="secondary full">+ Add company</button>
+        </div>
+      </div>
+
+      <div id="addCompanyHomePanel" class="panel hidden">
+        <div class="section-title"><h2>Add a company</h2><button id="cancelAddCompanyHome" class="ghost">Cancel</button></div>
+        <p class="muted">Create the core company profile once. EeziComply will reuse it across UBO, governance reviews and future company-secretarial services.</p>
+        <div class="form-grid">
+          <label>Registered company name<input id="homeCoName"></label>
+          <label>Registration number<input id="homeCoReg"></label>
+          <label>Entity type<select id="homeCoType"><option value="">Select entity type</option><option value="private">Private company</option><option value="public">Public company</option><option value="soc">State-owned company</option><option value="npc">Non-profit company (NPC)</option><option value="cc">Close corporation</option></select></label>
+        </div>
+        <div class="actions"><button id="saveCompanyHome" class="primary">Save company profile</button></div>
+        <div id="homeCompanyMsg"></div>
+      </div>
+
+      <div id="companyOverview" class="company-overview"></div>
+
+      <div class="workspace-section-head">
+        <div><div class="smallcaps">SERVICES</div><h2>What would you like EeziComply to do?</h2></div>
+      </div>
+      <div class="service-grid">
+        <article class="service-tile live">
+          <div class="service-top"><span class="service-status live">AVAILABLE</span><span id="uboTileStatus" class="service-meta"></span></div>
+          <h3>Beneficial Ownership</h3>
+          <p>Assess CIPC UBO readiness, resolve ownership questions and generate the filing pack.</p>
+          <button id="openUboService" class="primary full">Open UBO service</button>
+        </article>
+        <article class="service-tile">
+          <div class="service-top"><span class="service-status dev">PILOT</span><span id="moiTileStatus" class="service-meta"></span></div>
+          <h3>MOI Review</h3>
+          <p>ChatGPT-standard MOI review, suitability analysis, recommended amendments and professional outputs.</p>
+          <button id="openMoiService" class="primary full">Review an MOI</button>
+        </article>
+        <article class="service-tile">
+          <div class="service-top"><span class="service-status dev">PILOT</span><span id="shaTileStatus" class="service-meta"></span></div>
+          <h3>Shareholders' Agreement Review</h3>
+          <p>Review governance rights, commercial protections, funding obligations, deadlock and exit arrangements.</p>
+          <button id="openShaService" class="primary full">Review an agreement</button>
+        </article>
+        <article class="service-tile">
+          <div class="service-top"><span class="service-status dev">PILOT</span><span id="alignmentTileStatus" class="service-meta"></span></div>
+          <h3>MOI ↔ SHA Alignment</h3>
+          <p>Compare both documents, resolve conflicts and generate aligned working drafts from accepted changes.</p>
+          <button id="openAlignmentService" class="primary full">Check alignment</button>
+        </article>
+
+        <article class="service-tile coming"><div class="service-top"><span class="service-status soon">COMING SOON</span></div><h3>Annual Returns</h3><p>Annual return readiness, supporting records and filing guidance.</p></article>
+        <article class="service-tile coming"><div class="service-top"><span class="service-status soon">COMING SOON</span></div><h3>Directors & Officers</h3><p>Appointments, resignations, changes and supporting resolutions.</p></article>
+        <article class="service-tile coming"><div class="service-top"><span class="service-status soon">COMING SOON</span></div><h3>Shares & Registers</h3><p>Share issues/transfers, securities registers, cap tables and share certificates.</p></article>
+        <article class="service-tile coming"><div class="service-top"><span class="service-status soon">COMING SOON</span></div><h3>Resolutions & Minutes</h3><p>Prepare recurring company resolutions, notices and minutes around the same company record.</p></article>
+        <article class="service-tile coming"><div class="service-top"><span class="service-status soon">COMING SOON</span></div><h3>Compliance Calendar</h3><p>Keep track of recurring company-secretarial obligations and governance follow-ups.</p></article>
+        <article class="service-tile npo-tile"><div class="service-top"><span class="service-status specialist">SPECIALIST PRODUCT</span></div><h3>EeziNPO</h3><p>NPC/NPO/PBO/Section 18A and nonprofit governance support, powered by EeziComply.</p><a class="secondary btn full" href="https://eezinpo-pilot.vercel.app" target="_blank" rel="noopener">Open EeziNPO</a></article>
+      </div>
+
+      <div class="panel company-record-panel">
+        <div class="section-title"><h2>Company record</h2><span class="tag">Shared across services</span></div>
+        <div id="companyRecordSummary" class="record-summary"></div>
+      </div>
+    </div>
+
+    <div id="uboShell" class="wrap app-shell hidden">
+      <aside class="sidebar"><button class="secondary full" id="backToCompanyHome">← Company workspace</button><div class="case-summary"><div class="smallcaps">CURRENT CASE</div><strong id="caseName">New assessment</strong><span id="caseReg"></span></div><div class="case-switcher"><label>Switch filing<select id="caseSwitcher"><option value="">Loading saved filings…</option></select></label></div><nav id="stepNav"></nav><button class="secondary full" id="newCaseBtn">Start another assessment</button></aside>
       <section class="workspace">
+        <div class="mobile-new-case"><button class="secondary full" id="backToCompanyHomeMobile">← Company workspace</button></div>
         <div class="mobile-progress"><span id="mobileStep"></span><div class="bar"><i id="mobileBar"></i></div></div><div class="mobile-case-switch"><label>Switch filing<select id="caseSwitcherMobile"><option value="">Loading saved filings…</option></select></label></div><div class="mobile-step-jump"><label class="help" for="mobileJump">Go back to review or edit an earlier step</label><select id="mobileJump"></select></div><div class="mobile-new-case"><button class="secondary full" id="newCaseMobileBtn">Start another assessment</button></div>
         <div id="stepContent"></div>
       </section>
