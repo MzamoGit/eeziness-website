@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EeziComply | MOI ↔ SHA Alignment Review</title>
+<style>
+:root{--navy:#102445;--gold:#b88a2c;--ink:#172033;--muted:#667085;--line:#dbe1ea;--bg:#f5f7fb;--soft:#eef3f9}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.48}.wrap{max-width:1120px;margin:auto;padding:0 20px}.topbar{height:66px;background:#fff;border-bottom:1px solid var(--line)}.topbar .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{font-size:23px;font-weight:800;color:var(--navy)}.brand span{color:var(--gold)}a{text-decoration:none;color:inherit}.hero{background:#fff;padding:60px 0 42px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.09em;color:var(--gold)}h1{font-size:42px;line-height:1.08;color:var(--navy);margin:10px 0 15px}h2,h3{color:var(--navy)}.lead{font-size:18px;color:#4b596e;max-width:840px}.notice{background:#fff6df;border:1px solid #ecd7a8;padding:13px 15px;border-radius:10px;font-size:13px;margin-top:22px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin:20px 0;box-shadow:0 3px 12px #1024450a}.hidden{display:none!important}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;color:#344054;margin-bottom:6px}.field input{width:100%;padding:11px 12px;border:1px solid #cbd4df;border-radius:9px;font:inherit}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn,button{border:0;border-radius:9px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}.primary{background:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.muted{color:var(--muted)}.status{padding:13px 15px;border-radius:10px;margin:14px 0}.info{background:#edf5ff}.error{background:#fdecec;color:#8c2e2a}.success{background:#e9f8ef;color:#17623f}.conflict{border:1px solid var(--line);border-left:5px solid #d47b18;border-radius:10px;padding:15px;margin:12px 0;background:#fff}.conflict[data-severity="critical"]{border-left-color:#a33a35}.conflict-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.docbox{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:12px}.docbox b{display:block;color:var(--navy);margin-bottom:5px}.pill{font-size:10px;font-weight:800;border-radius:999px;padding:4px 8px;background:var(--soft);white-space:nowrap}.comparison{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;border-top:1px solid var(--line);padding:12px 0}.priority{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;border-top:1px solid var(--line);padding:12px 0}.priority span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:800}.drafts{display:grid;grid-template-columns:1fr 1fr;gap:14px}.draftbox{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fafbfd;max-height:620px;overflow:auto}.draftbox pre{white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;line-height:1.55}@media(max-width:760px){h1{font-size:34px}.conflict-grid,.comparison,.drafts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap"><a class="brand" href="/">Eezi<span>Comply</span></a><a class="secondary btn" href="/">Back to EeziComply</a></div></header>
+<section class="hero"><div class="wrap"><div class="eyebrow">GOVERNANCE DOCUMENT ALIGNMENT</div><h1>MOI ↔ Shareholders' Agreement Alignment Review</h1><p class="lead">Upload both documents. EeziComply will compare them clause-by-clause, identify conflicts and mismatches, explain which document takes precedence or should change, and propose specific resolutions for you to accept or reject.</p><div class="notice"><strong>Professional review:</strong> Every substantive alignment recommendation should be reviewed by an appropriately qualified professional before adoption, signature or filing. EeziComply still provides the detailed analysis, proposed resolutions and working drafts.</div></div></section>
+<main class="wrap">
+
+<section id="authPanel" class="panel">
+<h2>Sign in to start an alignment review</h2>
+<div class="field"><label>Email</label><input id="email" type="email"></div>
+<div class="field"><label>Password</label><input id="password" type="password"></div>
+<div class="actions"><button id="signIn" class="primary">Sign in</button><button id="signUp" class="secondary">Create account</button></div><div id="authMsg"></div>
+</section>
+
+<section id="uploadPanel" class="panel hidden">
+<h2>Upload both governance documents</h2>
+<div class="field"><label>Company name</label><input id="orgName"></div>
+<div class="field"><label>Memorandum of Incorporation</label><input id="moiFile" type="file" accept=".pdf,.doc,.docx"></div>
+<div class="field"><label>Shareholders' Agreement</label><input id="shaFile" type="file" accept=".pdf,.doc,.docx"></div>
+<div class="actions"><button id="runReview" class="primary">Compare documents</button><button id="signOut" class="secondary">Sign out</button></div><div id="reviewMsg"></div>
+</section>
+
+<section id="resultPanel" class="hidden">
+<div class="panel"><div class="eyebrow">EXECUTIVE ALIGNMENT REVIEW</div><h2 id="assessmentTitle"></h2><p id="summary"></p><h3>EeziComply commentary</h3><p id="commentary"></p><h3>Recommended way forward</h3><p id="recommendation"></p></div>
+<div class="panel"><h2>Comparison map</h2><div id="comparisonMap"></div></div>
+<div class="panel"><h2>Conflicts and proposed resolutions</h2><p class="muted">Accept or reject each proposed resolution. EeziComply will only incorporate resolutions you accept.</p><div id="conflicts"></div><div class="actions"><button id="generateAligned" class="primary hidden">Generate aligned MOI, aligned SHA & checklist</button></div><div id="revisionMsg"></div></div>
+<div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
+<div class="panel"><h2>Questions for shareholders</h2><ul id="questions"></ul></div>
+<div id="draftPanel" class="panel hidden"><div class="eyebrow">ALIGNED WORKING DRAFTS</div><div id="professionalReview" class="notice"></div><div class="drafts"><div class="draftbox"><h2>Revised MOI</h2><pre id="revisedMoi"></pre></div><div class="draftbox"><h2>Revised Shareholders' Agreement</h2><pre id="revisedSha"></pre></div></div><h2>What to do next</h2><div id="nextSteps"></div></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+<script>
+const {createClient}=supabase;const sb=createClient('https://ttefsapyjuczmuhtlfqj.supabase.co','sb_publishable_RXurqZIvpP22Xs6gZTb88A_Bnc9Mlh5');
+const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));const msg=(t,x)=>'<div class="status '+t+'">'+x+'</div>';
+function showIn(){$('authPanel').classList.add('hidden');$('uploadPanel').classList.remove('hidden')}
+async function auth(mode){const email=$('email').value.trim(),password=$('password').value;const r=mode==='signup'?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});if(r.error){$('authMsg').innerHTML=msg('error',esc(r.error.message));return}if(r.data.session)showIn();else $('authMsg').innerHTML=msg('info','Check your email to complete account setup.')}
+$('signIn').onclick=()=>auth('signin');$('signUp').onclick=()=>auth('signup');$('signOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
+
+let currentReviewId=null;
+$('runReview').onclick=async()=>{
+ const moi=$('moiFile').files[0],sha=$('shaFile').files[0];if(!moi||!sha){$('reviewMsg').innerHTML=msg('error','Upload both the MOI and Shareholders Agreement.');return}
+ $('runReview').disabled=true;$('reviewMsg').innerHTML=msg('info','Uploading and comparing both documents…');
+ try{
+  const {data:{user}}=await sb.auth.getUser();if(!user)throw new Error('Please sign in again.');
+  const {data:review,error:e}=await sb.from('eezicomply_alignment_reviews').insert({owner_id:user.id,organisation_name:$('orgName').value.trim(),status:'draft',moi_filename:moi.name,sha_filename:sha.name}).select('*').single();if(e)throw e;currentReviewId=review.id;
+  const safe=n=>n.replace(/[^a-zA-Z0-9._-]/g,'-'),base=user.id+'/'+review.id+'/';
+  const moiPath=base+'moi-'+Date.now()+'-'+safe(moi.name),shaPath=base+'sha-'+Date.now()+'-'+safe(sha.name);
+  const [um,us]=await Promise.all([sb.storage.from('eezicomply-alignment').upload(moiPath,moi,{contentType:moi.type}),sb.storage.from('eezicomply-alignment').upload(shaPath,sha,{contentType:sha.type})]);if(um.error)throw um.error;if(us.error)throw us.error;
+  const saved=await sb.from('eezicomply_alignment_reviews').update({moi_storage_path:moiPath,sha_storage_path:shaPath,status:'uploaded',updated_at:new Date().toISOString()}).eq('id',review.id);if(saved.error)throw saved.error;
+  const fn=await sb.functions.invoke('eezicomply-review-alignment',{body:{review_id:review.id}});if(fn.error)throw fn.error;if(fn.data?.error)throw new Error(fn.data.error);render(fn.data.result,review.id);$('reviewMsg').innerHTML=msg('success','Alignment Review complete.');
+ }catch(e){$('reviewMsg').innerHTML=msg('error',esc(e.message||e))}finally{$('runReview').disabled=false}
+};
+
+function render(r,id){
+ currentReviewId=id;$('resultPanel').classList.remove('hidden');$('assessmentTitle').textContent=String(r.alignment_assessment||'').replaceAll('_',' ');$('summary').textContent=r.executive_summary||'';$('commentary').textContent=r.overall_commentary||'';$('recommendation').textContent=r.overall_recommendation||'';
+ $('comparisonMap').innerHTML=(r.comparison_map||[]).map(x=>'<div class="comparison"><div><b>'+esc(x.topic)+'</b></div><div>'+esc(x.moi_position)+'</div><div>'+esc(x.sha_position)+'<br><span class="pill">'+esc(x.alignment_status.replaceAll('_',' '))+'</span><p>'+esc(x.comment)+'</p></div></div>').join('');
+ const conflicts=(r.conflicts||[]).filter(c=>c.conflict_type!=='no_conflict'&&c.target_document!=='none');
+ $('conflicts').innerHTML=conflicts.map(c=>'<article class="conflict" data-severity="'+esc(c.severity)+'"><div class="conflict-grid"><div class="docbox"><b>MOI · '+esc(c.moi_reference||'No reference')+'</b>'+esc(c.moi_position)+'</div><div class="docbox"><b>SHA · '+esc(c.sha_reference||'No reference')+'</b>'+esc(c.sha_position)+'</div></div><h3>'+esc(c.topic)+'</h3><p><b>EeziComply comment:</b> '+esc(c.chatgpt_comment)+'</p><p><b>Precedence / legal position:</b> '+esc(c.legal_precedence_position)+'</p><p><b>Why it matters:</b> '+esc(c.why_it_matters)+'</p><p><b>Recommended resolution:</b> '+esc(c.recommended_resolution)+'</p><p><b>Document to change:</b> '+esc(c.target_document.toUpperCase())+'</p><p><b>Professional review:</b> '+esc(c.professional_review_recommendation)+'</p><div class="actions"><button class="primary decision" data-key="'+esc(c.change_key)+'" data-decision="accepted">Accept resolution</button><button class="secondary decision" data-key="'+esc(c.change_key)+'" data-decision="rejected">Reject</button></div><div class="field"><label>Optional note</label><input class="decisionNote" data-key="'+esc(c.change_key)+'" placeholder="Clarify the shareholders’ actual intention"></div><div class="status info hidden" id="decision_'+esc(c.change_key)+'"></div></article>').join('')||'<p class="muted">No document changes proposed.</p>';
+ document.querySelectorAll('.decision').forEach(b=>b.onclick=()=>saveDecision(b.dataset.key,b.dataset.decision));if(conflicts.length)$('generateAligned').classList.remove('hidden');
+ $('priorities').innerHTML=(r.priority_actions||[]).map(p=>'<div class="priority"><span>'+esc(p.priority)+'</span><div><b>'+esc(p.action)+'</b><p>'+esc(p.reason)+'</p></div></div>').join('');
+ $('questions').innerHTML=(r.questions_for_shareholders||[]).map(q=>'<li>'+esc(q)+'</li>').join('')||'<li>No further intention questions identified.</li>';$('resultPanel').scrollIntoView({behavior:'smooth'});
+}
+async function saveDecision(key,decision){const {data:{user}}=await sb.auth.getUser();const note=document.querySelector('.decisionNote[data-key="'+CSS.escape(key)+'"]')?.value||'';const r=await sb.from('eezicomply_alignment_change_decisions').update({decision,user_note:note,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('review_id',currentReviewId).eq('change_key',key).eq('owner_id',user.id);const e=$('decision_'+key);if(e){e.classList.remove('hidden');e.className='status '+(r.error?'error':'success');e.textContent=r.error?r.error.message:(decision==='accepted'?'Accepted for aligned drafts.':'Rejected — this resolution will not be incorporated.')}}
+$('generateAligned').onclick=async()=>{if(!currentReviewId)return;$('generateAligned').disabled=true;$('revisionMsg').innerHTML=msg('info','Preparing both aligned documents and the implementation checklist…');try{const fn=await sb.functions.invoke('eezicomply-generate-aligned-documents',{body:{review_id:currentReviewId}});if(fn.error)throw fn.error;if(fn.data?.error)throw new Error(fn.data.error);$('professionalReview').textContent=fn.data.professional_review_recommendation||'Have both aligned documents reviewed by an appropriately qualified professional before adoption, signature or filing.';$('revisedMoi').textContent=fn.data.revised_moi||'';$('revisedSha').textContent=fn.data.revised_sha||'';$('nextSteps').innerHTML=(fn.data.next_steps||[]).map((s,i)=>'<div class="priority"><span>'+(i+1)+'</span><div><b>'+esc(s.title)+'</b><p>'+esc(s.explanation)+'</p><ul>'+((s.actions||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Who:</b> '+esc(s.responsible_person)+'</p><p><b>Evidence to keep:</b></p><ul>'+((s.evidence_to_keep||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Complete when:</b> '+esc(s.completion_test)+'</p><p><b>Professional review:</b> '+esc(s.professional_review_recommendation)+'</p></div></div>').join('');$('draftPanel').classList.remove('hidden');$('draftPanel').scrollIntoView({behavior:'smooth'});$('revisionMsg').innerHTML=msg('success','Aligned working drafts and checklist prepared.')}catch(e){$('revisionMsg').innerHTML=msg('error',esc(e.message||e))}finally{$('generateAligned').disabled=false}};
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)showIn()})();
+</script>
+</body></html>
