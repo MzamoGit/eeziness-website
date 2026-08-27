@@ -471,3 +471,9 @@ h3{letter-spacing:-.025em}
   .build-principles{grid-template-columns:1fr}
   .build-principles article{min-height:0}
 }
+
+.nasela-brand-block{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.nasela-about-logo{display:block;width:180px;max-width:100%;height:auto;object-fit:contain}
+@media(max-width:740px){
+  .nasela-about-logo{width:165px}
+}
