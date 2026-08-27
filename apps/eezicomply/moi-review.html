@@ -64,6 +64,9 @@
 const {createClient}=supabase;
 const sb=createClient('https://anzxbtjwpunglltlbpyn.supabase.co','sb_publishable__qh5R8tareIzMucpJ7pW5g_Ul0kV2JE');
 const $=id=>document.getElementById(id);
+const pageParams=new URLSearchParams(location.search);
+const selectedCompanyId=pageParams.get('company_id')||null;
+const selectedCompanyName=pageParams.get('company_name')||'';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 function msg(type,text){return '<div class="status '+type+'">'+text+'</div>'}
 function showSignedIn(user){$('authPanel').classList.add('hidden');$('reviewPanel').classList.remove('hidden')}
@@ -76,7 +79,7 @@ $('runReview').onclick=async()=>{
  $('runReview').disabled=true;$('reviewMsg').innerHTML=msg('info','Uploading MOI…');
  try{
    const {data:{user}}=await sb.auth.getUser();if(!user)throw new Error('Please sign in again.');
-   const {data:review,error:createError}=await sb.from('eezicomply_moi_reviews').insert({owner_id:user.id,organisation_name,status:'draft',original_filename:file.name,mime_type:file.type}).select('*').single();
+   const {data:review,error:createError}=await sb.from('eezicomply_moi_reviews').insert({owner_id:user.id,company_id:selectedCompanyId,organisation_name:organisation_name||selectedCompanyName,status:'draft',original_filename:file.name,mime_type:file.type}).select('*').single();
    if(createError)throw createError;
    const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'-'),path=user.id+'/'+review.id+'/'+Date.now()+'-'+safe;
    const up=await sb.storage.from('eezicomply-moi').upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;
@@ -259,6 +262,7 @@ async function generateProfessionalOutputsPack(){
 }
 $('generateProfessionalOutputs').onclick=generateProfessionalOutputsPack;
 
+if(selectedCompanyName&&$('orgName')) $('orgName').value=selectedCompanyName;
 (async()=>{const {data:{session}}=await sb.auth.getSession();if(session)showSignedIn(session.user)})();
 </script>
 </body></html>
