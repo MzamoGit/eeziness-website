@@ -1,6 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/apps/eezicomply/index.html" },
+    { "source": "/sample.html", "destination": "/apps/eezicomply/sample.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
