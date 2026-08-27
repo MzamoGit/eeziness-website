@@ -61,6 +61,11 @@
 @media(max-width:900px){.company-home-head{grid-template-columns:1fr}.company-overview{grid-template-columns:1fr 1fr}.service-grid{grid-template-columns:1fr 1fr}.record-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.company-home{padding-top:20px}.company-home-head h1{font-size:31px}.company-overview,.service-grid,.record-summary{grid-template-columns:1fr}.service-tile{min-height:auto}}
 
+
+.detailed-answer{line-height:1.6}
+.detailed-answer ul{margin:8px 0 12px;padding-left:20px}
+.ask-professional{margin-top:12px;padding:11px 12px;border-radius:9px;background:#fff6df;border:1px solid #ecd7a8;color:#5f4816}
+.ask-source{margin-top:10px;font-size:11px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -191,7 +196,7 @@
 </main>
 
 <button id="askFab" class="ask-fab hidden">Ask EeziComply</button>
-<aside id="askDrawer" class="ask-drawer hidden"><div class="drawer-head"><div><strong>Ask EeziComply</strong><span>Answers about this case</span></div><button id="askClose">×</button></div><div id="askConversation" class="conversation"><div class="bot">Ask what a question means, why a person was identified, what a document is for, or what to do next.</div></div><div class="quick"><button>What do I do next?</button><button>Why was this person identified?</button><button>What documents do I still need?</button></div><textarea id="askQuestion" rows="3" placeholder="Ask in English, isiZulu or another language"></textarea><button class="primary full" id="askSend">Ask EeziComply</button></aside>
+<aside id="askDrawer" class="ask-drawer hidden"><div class="drawer-head"><div><strong>Ask EeziComply</strong><span>Answers about this case</span></div><button id="askClose">×</button></div><div id="askConversation" class="conversation"><div class="bot">Ask EeziComply about this company, its UBO position, governance documents, review findings, recommended changes, professional outputs or what to do next. I’ll answer in detail and tell you what should be professionally reviewed.</div></div><div class="quick"><button>What should this company do next?</button><button>Explain the main governance risks</button><button>What documents or information are still missing?</button></div><textarea id="askQuestion" rows="3" placeholder="Ask in English, isiZulu or another language"></textarea><button class="primary full" id="askSend">Ask EeziComply</button></aside>
 
 <div id="toast" class="toast hidden"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -313,7 +318,7 @@ function showPublic(){$('publicLanding').classList.remove('hidden');$('authView'
 function showAuth(mode='signin'){$('publicLanding').classList.add('hidden');$('appView').classList.add('hidden');$('authView').classList.remove('hidden');setAuthMode(mode)}
 function setAuthMode(mode){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.auth===mode));$('authSubmit').textContent=mode==='signup'?'Create account':'Sign in';$('authSubmit').dataset.mode=mode;$('authPassword').autocomplete=mode==='signup'?'new-password':'current-password';$('authMessage').innerHTML=''}
 function showApp(){$('publicLanding').classList.add('hidden');$('authView').classList.add('hidden');$('appView').classList.remove('hidden');$('signOutBtn').classList.remove('hidden')}
-function showCompanyHomeShell(){showApp();$('companyHome')?.classList.remove('hidden');$('uboShell')?.classList.add('hidden');$('askFab')?.classList.add('hidden');$('askTop')?.classList.add('hidden')}
+function showCompanyHomeShell(){showApp();$('companyHome')?.classList.remove('hidden');$('uboShell')?.classList.add('hidden');$('askFab')?.classList.remove('hidden');$('askTop')?.classList.remove('hidden')}
 function showUboShell(){showApp();$('companyHome')?.classList.add('hidden');$('uboShell')?.classList.remove('hidden');$('askFab')?.classList.remove('hidden');$('askTop')?.classList.remove('hidden')}
 async function authSubmit(){const email=$('authEmail').value.trim(),password=$('authPassword').value,mode=$('authSubmit').dataset.mode||'signin';if(!email||password.length<6){$('authMessage').innerHTML=msg('warning','Enter a valid email and a password of at least 6 characters.');return}if(mode==='signup'){const {data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:'https://eezicomply-pilot.vercel.app'}});if(error){$('authMessage').innerHTML=msg('error',esc(error.message));return}if(data.session){state.user=data.user;await loadCompanyHome()}else $('authMessage').innerHTML=msg('success','Account created. Check your email and click the confirmation link. It will return you to EeziComply; then sign in.')}else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){$('authMessage').innerHTML=msg('error',esc(error.message.includes('Email not confirmed')?'Please confirm your email first, then sign in.':error.message));return}state.user=data.user;await loadCompanyHome()}}
 function nav(){const n=$('stepNav');n.innerHTML=steps.map((s,i)=>`<button class="step-link ${state.step===i+1?'active':''} ${state.filing&&i+1<(state.filing.current_step||1)?'done':''}" data-step="${i+1}"><span>${i+1}</span>${s}</button>`).join('');n.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>go(Number(b.dataset.step)));$('mobileStep').textContent=`Step ${state.step} of 10 · ${steps[state.step-1]}`;$('mobileBar').style.width=`${state.step*10}%`;const j=$('mobileJump');if(j){j.innerHTML=steps.map((s,i)=>`<option value="${i+1}" ${state.step===i+1?'selected':''}>Step ${i+1}: ${esc(s)}</option>`).join('');j.onchange=()=>go(Number(j.value))}}
@@ -415,7 +420,26 @@ function nextReminder(){const now=new Date();if(state.company?.anniversary_date)
 async function completeCase(){const ref=$('trackRef').value.trim(),file=$('confirmFile').files[0];if(!ref||!file){$('completeMsg').innerHTML=msg('warning','Enter the CIPC tracking/reference number and upload the confirmation/certificate.');return}const path=`${state.user.id}/${state.filing.id}/confirmation/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;const up=await sb.storage.from('eezicomply-filings').upload(path,file,{contentType:file.type});if(up.error){$('completeMsg').innerHTML=msg('error',esc(up.error.message));return}const due=nextReminder();const now=new Date().toISOString();const r=await sb.from('eezicomply_filings').update({cipc_tracking_reference:ref,cipc_confirmation_path:path,submitted_at:now,completed_at:now,status:'completed',annual_reminder_date:due,current_step:10}).eq('id',state.filing.id);if(r.error){$('completeMsg').innerHTML=msg('error',esc(r.error.message));return}await sb.from('eezicomply_filing_events').insert({user_id:state.user.id,filing_id:state.filing.id,event_type:'cipc_filing_completed',event_data:{tracking_reference:ref,confirmation_path:path,annual_reminder_date:due}});await refresh();renderComplete($('stepContent'));toast('Filing marked complete')}
 function askOpen(){$('askDrawer').classList.remove('hidden')}
 function askClose(){$('askDrawer').classList.add('hidden')}
-async function askSend(){const q=$('askQuestion').value.trim();if(!q)return;const conv=$('askConversation');conv.innerHTML+=`<div class="userbubble">${esc(q)}</div>`;$('askQuestion').value='';conv.innerHTML+='<div class="bot" id="thinking">Thinking…</div>';conv.scrollTop=conv.scrollHeight;const r=await invokeFn('ask-eezicomply',{filingId:state.filing?.id||null,question:q});$('thinking')?.remove();if(r.ok)conv.innerHTML+=`<div class="bot">${esc(r.data.answer)}${r.data.suggested_actions?.length?'<br><br><b>Suggested next step:</b> '+esc(r.data.suggested_actions[0]):''}</div>`;else conv.innerHTML+=`<div class="bot">${esc(r.data.message||'Ask EeziComply is temporarily unavailable. Your case remains saved; please try again shortly.')}</div>`;conv.scrollTop=conv.scrollHeight}
+async function askSend(){
+ const q=$('askQuestion').value.trim();if(!q)return;
+ const conv=$('askConversation');
+ conv.innerHTML+=`<div class="userbubble">${esc(q)}</div>`;
+ $('askQuestion').value='';
+ conv.innerHTML+='<div class="bot" id="thinking">Thinking through the company context…</div>';
+ conv.scrollTop=conv.scrollHeight;
+ const companyId=state.company?.id||state.homeCompanyId||null;
+ const r=await invokeFn('ask-eezicomply',{company_id:companyId,filing_id:state.filing?.id||null,question:q});
+ $('thinking')?.remove();
+ if(r.ok){
+   const actions=(r.data.suggested_actions||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+   const missing=(r.data.missing_information||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+   const sources=(r.data.source_context||[]).map(x=>esc(x)).join(' · ');
+   conv.innerHTML+=`<div class="bot detailed-answer"><div>${esc(r.data.answer).replace(/\n/g,'<br>')}</div>${actions?'<br><b>Suggested actions</b><ul>'+actions+'</ul>':''}${missing?'<b>Information to confirm</b><ul>'+missing+'</ul>':''}${r.data.professional_review_recommendation?'<div class="ask-professional"><b>Professional review</b><br>'+esc(r.data.professional_review_recommendation)+'</div>':''}${sources?'<div class="ask-source">Context used: '+sources+'</div>':''}</div>`;
+ }else{
+   conv.innerHTML+=`<div class="bot">${esc(r.data.message||'Ask EeziComply is temporarily unavailable. Your company record remains saved; please try again shortly.')}</div>`;
+ }
+ conv.scrollTop=conv.scrollHeight;
+}
 $('sampleTop').onclick=()=>window.open('/sample.html','_blank');$('startBtn').onclick=()=>showAuth('signup');$('backPublic').onclick=showPublic;$('homeLink').onclick=e=>{e.preventDefault();if(state.user)loadCompanyHome(state.homeCompanyId);else showPublic()};document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setAuthMode(b.dataset.auth));$('authSubmit').onclick=authSubmit;$('signOutBtn').onclick=async()=>{await sb.auth.signOut();state.user=null;$('signOutBtn').classList.add('hidden');showPublic()};const startNewAssessment=()=>{state.filing=null;state.company=null;state.links=[];state.owners=[];state.docs=[];state.shareTx=[];state.vaultDocs=[];state.knownCompanies=[];state.selectedKnownCompany=null;state.vaultLinks=[];state.pendingCompanyDoc=null;state.pendingCompanyExtraction=null;state.readiness=null;state.step=1;renderApp()};$('newCaseBtn').onclick=startNewAssessment;if($('newCaseMobileBtn'))$('newCaseMobileBtn').onclick=startNewAssessment;$('addCompanyHomeBtn').onclick=()=>{$('addCompanyHomePanel').classList.remove('hidden');$('addCompanyHomePanel').scrollIntoView({behavior:'smooth'})};
 $('cancelAddCompanyHome').onclick=()=>$('addCompanyHomePanel').classList.add('hidden');
 $('saveCompanyHome').onclick=saveHomeCompany;
