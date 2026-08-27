@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { PDFDocument, StandardFonts, rgb } from "npm:pdf-lib@1.17.1";
 import {
-  AlignmentType, Document, Footer, HeadingLevel, Packer, PageNumber,
+  AlignmentType, Document, Footer, HeadingLevel, Packer, PageBreak, PageNumber,
   Paragraph, Table, TableCell, TableRow, TextRun, WidthType
 } from "npm:docx@9.5.1";
 
@@ -128,11 +128,16 @@ function textDocumentSections(kind:string, review:any):Section[]{
 }
 
 function docxParagraphsFromText(text:string){
-  const lines=safe(text).split(/\n+/);
-  return lines.map(line=>new Paragraph({
-    spacing:{after:120,line:300},
-    children:[new TextRun({text:line,font:"Arial",size:22})]
-  }));
+  const lines=safe(text).split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  return lines.map(line=>{
+    const isMain=/^(ARTICLE|SCHEDULE|ANNEXURE|APPENDIX)\b/i.test(line)||/^[A-Z][A-Z\s&()/-]{5,}$/.test(line);
+    const isClause=/^\d+(?:\.\d+)*[.)]?\s+/.test(line);
+    const isSignature=/^(SIGNED|SIGNATURE|FOR AND ON BEHALF|WITNESS)\b/i.test(line);
+    if(isMain) return new Paragraph({heading:HeadingLevel.HEADING_1,spacing:{before:240,after:100},children:[new TextRun({text:line,bold:true,font:"Arial",size:26,color:"102445"})]});
+    if(isClause) return new Paragraph({spacing:{before:100,after:90,line:300},children:[new TextRun({text:line,font:"Arial",size:22,bold:/^\d+[.)]\s+/.test(line)})]});
+    if(isSignature) return new Paragraph({spacing:{before:220,after:120},children:[new TextRun({text:line,font:"Arial",size:22,bold:true})]});
+    return new Paragraph({spacing:{after:100,line:300},alignment:AlignmentType.JUSTIFIED,children:[new TextRun({text:line,font:"Arial",size:22})]});
+  });
 }
 
 async function makeDocx(docTitle:string, company:string, version:number, sections:Section[]){
@@ -158,7 +163,8 @@ async function makeDocx(docTitle:string, company:string, version:number, section
         ]})
       ]
     }),
-    new Paragraph({spacing:{before:260,after:120},children:[new TextRun({text:professionalNotice(),bold:true,font:"Arial",size:20,color:"8A3D19"})]})
+    new Paragraph({spacing:{before:260,after:120},children:[new TextRun({text:professionalNotice(),bold:true,font:"Arial",size:20,color:"8A3D19"})]}),
+    new Paragraph({children:[new PageBreak()]})
   ];
 
   for(const s of sections){
@@ -212,6 +218,7 @@ async function makePdf(docTitle:string, company:string, version:number, sections
   heading(docTitle,18);line(company||"Company not supplied",12,true);y-=10;
   line(`Document status: Professional Review Required   |   Version: ${version}   |   Generated: ${new Date().toLocaleDateString("en-ZA")}`,9,false,0,rgb(.35,.39,.46));y-=12;
   line(professionalNotice(),9,true,0,rgb(.54,.24,.10));y-=15;
+  newPage();
   for(const s of sections){
     heading(s.heading,14);
     for(const p of s.paragraphs||[]){for(const para of safe(p).split(/\n+/)){line(para,10);y-=4}}
