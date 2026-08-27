@@ -41,7 +41,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
 <script>
-const {createClient}=supabase;const sb=createClient('https://ttefsapyjuczmuhtlfqj.supabase.co','sb_publishable_RXurqZIvpP22Xs6gZTb88A_Bnc9Mlh5');
+const {createClient}=supabase;const sb=createClient('https://anzxbtjwpunglltlbpyn.supabase.co','sb_publishable__qh5R8tareIzMucpJ7pW5g_Ul0kV2JE');
 const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));const msg=(t,x)=>'<div class="status '+t+'">'+x+'</div>';
 function showIn(){$('authPanel').classList.add('hidden');$('uploadPanel').classList.remove('hidden')}
 async function auth(mode){const email=$('email').value.trim(),password=$('password').value;const r=mode==='signup'?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});if(r.error){$('authMsg').innerHTML=msg('error',esc(r.error.message));return}if(r.data.session)showIn();else $('authMsg').innerHTML=msg('info','Check your email to complete account setup.')}
