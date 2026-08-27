@@ -384,3 +384,90 @@ h3{letter-spacing:-.025em}
   .product-family-ecosystem{margin:22px 0 30px}
   .product-family-ecosystem .hero-panel{min-height:0}
 }
+
+
+/* Revised About: origin, credibility and build philosophy */
+.specialist-section{
+  background:#fff;
+  padding-top:42px
+}
+.about-origin{
+  display:grid;
+  grid-template-columns:.82fr 1.18fr;
+  gap:64px;
+  align-items:start
+}
+.about-origin-copy p{
+  font-size:16px;
+  color:#4d5c6e
+}
+.build-principles{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:34px
+}
+.build-principles article{
+  min-height:190px;
+  padding:20px;
+  border:1px solid #dfe6ec;
+  border-radius:15px;
+  background:#f8fafc
+}
+.build-principles article:nth-child(1){border-top:6px solid #173f70}
+.build-principles article:nth-child(2){border-top:6px solid #f58220}
+.build-principles article:nth-child(3){border-top:6px solid #0d7e72}
+.build-principles article:nth-child(4){border-top:6px solid #6c48aa}
+.build-principles article>span{
+  display:inline-grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  background:#173f70;
+  color:#fff;
+  font-size:10px;
+  font-weight:800;
+  margin-bottom:14px
+}
+.build-principles h3{
+  color:#173f70;
+  font-size:16px;
+  margin-bottom:8px
+}
+.build-principles p{
+  color:#637284;
+  font-size:12.5px;
+  margin-bottom:0
+}
+.nasela-about{
+  margin-top:20px;
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:28px;
+  align-items:center;
+  padding:24px 26px;
+  background:#fff8ef;
+  border:1px solid #efd8bb;
+  border-left:8px solid #f58220;
+  border-radius:16px
+}
+.nasela-about h3{
+  color:#173f70;
+  font-size:22px;
+  margin-bottom:0
+}
+.nasela-about p{
+  margin-bottom:0;
+  font-size:13.5px;
+  color:#5f6f82
+}
+@media(max-width:980px){
+  .about-origin{grid-template-columns:1fr;gap:24px}
+  .build-principles{grid-template-columns:repeat(2,1fr)}
+  .nasela-about{grid-template-columns:1fr}
+}
+@media(max-width:740px){
+  .build-principles{grid-template-columns:1fr}
+  .build-principles article{min-height:0}
+}
