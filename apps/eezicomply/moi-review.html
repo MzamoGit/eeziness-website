@@ -31,7 +31,7 @@
 </section>
 
 <section id="resultPanel" class="hidden">
-<div class="panel"><div class="eyebrow">EXECUTIVE SUMMARY</div><h2 id="assessmentTitle"></h2><p id="summary" class="summary"></p></div>
+<div class="panel"><div class="eyebrow">EXECUTIVE REVIEW</div><h2 id="assessmentTitle"></h2><p id="summary" class="summary"></p><h3>EeziComply commentary</h3><p id="overallCommentary"></p><h3>Recommended way forward</h3><p id="overallRecommendation"></p></div>
 <div class="panel"><h2>Key governance map</h2><div id="governanceMap" class="grid"></div></div>
 <div class="panel"><h2>Findings</h2><div id="findings"></div></div>
 <div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
@@ -74,9 +74,11 @@ function render(r){
  $('resultPanel').classList.remove('hidden');
  $('assessmentTitle').textContent=String(r.overall_assessment||'').replaceAll('_',' ');
  $('summary').textContent=r.executive_summary||'';
+ $('overallCommentary').textContent=r.overall_commentary||'';
+ $('overallRecommendation').textContent=r.overall_recommendation||'';
  const labels={board_appointment_and_removal:'Board appointment & removal',board_powers:'Board powers',shareholder_reserved_matters:'Shareholder reserved matters',approval_thresholds:'Approval thresholds',share_transfers_and_preemption:'Share transfers & pre-emption',distributions:'Distributions',meeting_and_voting_rules:'Meeting & voting rules',amendment_rules:'MOI amendment rules'};
  $('governanceMap').innerHTML=Object.entries(r.key_governance_map||{}).map(([k,v])=>'<div class="map-card"><b>'+esc(labels[k]||k)+'</b><span>'+esc(v)+'</span></div>').join('');
- $('findings').innerHTML=(r.findings||[]).map(f=>'<article class="finding" data-severity="'+esc(f.severity)+'"><div class="finding-head"><h3>'+esc(f.title)+'</h3><span class="pill">'+esc(f.classification.replaceAll('_',' '))+' · '+esc(f.severity)+'</span></div><p><b>Clause:</b> '+esc(f.clause_reference||'Not identified')+'</p><p>'+esc(f.current_position)+'</p><p><b>Why it matters:</b> '+esc(f.why_it_matters)+'</p><p><b>Companies Act position:</b> '+esc(f.companies_act_position)+'</p><p><b>Recommended action:</b> '+esc(f.recommended_action)+'</p></article>').join('')||'<p class="muted">No material findings returned.</p>';
+ $('findings').innerHTML=(r.findings||[]).map(f=>'<article class="finding" data-severity="'+esc(f.severity)+'"><div class="finding-head"><h3>'+esc(f.title)+'</h3><span class="pill">'+esc(f.classification.replaceAll('_',' '))+' · '+esc(f.severity)+'</span></div><p><b>Clause:</b> '+esc(f.clause_reference||'Not identified')+'</p><p>'+esc(f.current_position)+'</p><p><b>EeziComply comment:</b> '+esc(f.chatgpt_comment||'')+'</p><p><b>Why it matters:</b> '+esc(f.why_it_matters)+'</p><p><b>Companies Act position:</b> '+esc(f.companies_act_position)+'</p><p><b>Recommendation:</b> '+esc(f.recommendation||f.recommended_action)+'</p><p><b>Implementation step:</b> '+esc(f.recommended_action)+'</p></article>').join('')||'<p class="muted">No material findings returned.</p>';
  $('priorities').innerHTML=(r.priority_actions||[]).map(p=>'<div class="priority"><span>'+esc(p.priority)+'</span><div><b>'+esc(p.action)+'</b><br><small>'+esc(p.reason)+'</small></div></div>').join('');
  $('questions').innerHTML=(r.questions_for_company||[]).map(q=>'<li>'+esc(q)+'</li>').join('')||'<li>No further questions identified.</li>';
  $('resultPanel').scrollIntoView({behavior:'smooth'});
