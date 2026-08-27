@@ -51,6 +51,102 @@ Deno.serve(async(req:Request)=>{
       .createSignedUrl(review.storage_path,180);
     if(signedError||!signed?.signedUrl) throw new Error(signedError?.message||'Could not access uploaded MOI');
 
+    // First identify whether this is a prescribed standard short-form MOI.
+    const detector=new OpenAI({apiKey:openaiKey});
+    const detectSchema={type:'object',additionalProperties:false,properties:{
+      detected_form:{type:'string',enum:['cor15_1a_private_short_form','cor15_1c_npc_short_form','other_or_customised','uncertain']},
+      confidence:{type:'number',minimum:0,maximum:1},
+      explanation:{type:'string'},
+      company_type:{type:'string'}
+    },required:['detected_form','confidence','explanation','company_type']};
+
+    const detectResponse=await detector.responses.create({
+      model:'gpt-5',
+      reasoning:{effort:'low'},
+      instructions:`Identify whether the uploaded South African Memorandum of Incorporation is the prescribed standard short-form CoR 15.1A for a private company or CoR 15.1C for a non-profit company without members. Do not classify a document as a prescribed short form merely because it is short. Look for the prescribed form identity, structure and headings. If it is customised, a long form, an amended bespoke MOI or uncertain, say so.`,
+      input:[{role:'user',content:[
+        {type:'input_text',text:`Filename: ${review.original_filename||'MOI'}\nIdentify the MOI form before substantive review.`},
+        {type:'input_file',file_url:signed.signedUrl}
+      ]}],
+      text:{verbosity:'low',format:{type:'json_schema',name:'eezicomply_moi_form_detection',strict:true,schema:detectSchema}}
+    } as any,{signal:AbortSignal.timeout(60000)});
+
+    const detection=JSON.parse(detectResponse.output_text||'{}');
+    const isShortForm=['cor15_1a_private_short_form','cor15_1c_npc_short_form'].includes(detection.detected_form)&&Number(detection.confidence||0)>=0.80;
+
+    if(isShortForm){
+      const formName=detection.detected_form==='cor15_1a_private_short_form'?'CoR 15.1A':'CoR 15.1C';
+      const questions=detection.detected_form==='cor15_1a_private_short_form' ? [
+        {key:'shareholder_count',question:'How many shareholders does the company currently have?',answer_type:'number'},
+        {key:'unrelated_shareholders',question:'Are any of the shareholders unrelated investors or business partners rather than members of the same family/group?',answer_type:'yes_no'},
+        {key:'minority_investors',question:'Does any minority shareholder expect special protection over important company decisions?',answer_type:'yes_no'},
+        {key:'board_seats',question:'Does any shareholder or investor expect a right to appoint or nominate a director?',answer_type:'yes_no'},
+        {key:'reserved_matters',question:'Are there important decisions that you believe should need special or unanimous shareholder approval?',answer_type:'yes_no'},
+        {key:'transfer_controls',question:'Do the shareholders want special restrictions on selling or transferring shares?',answer_type:'yes_no'},
+        {key:'funding_obligations',question:'Do shareholders have agreed obligations to provide future funding, guarantees or shareholder loans?',answer_type:'yes_no'},
+        {key:'deadlock_risk',question:'Could a disagreement between shareholders materially prevent the company from making important decisions?',answer_type:'yes_no'},
+        {key:'external_investment',question:'Is the company expecting external investment, a funding round or a new shareholder in the foreseeable future?',answer_type:'yes_no'},
+        {key:'sha_exists',question:'Does the company have, or is it negotiating, a Shareholders’ Agreement?',answer_type:'yes_no'},
+        {key:'different_share_rights',question:'Do different shareholders have, or expect to have, different economic, voting or control rights?',answer_type:'yes_no'}
+      ] : [
+        {key:'members_expected',question:'Does the NPC have members, or do you expect it to have members in future?',answer_type:'yes_no'},
+        {key:'special_board_rights',question:'Do any founders, funders or stakeholders expect special rights to appoint or remove directors?',answer_type:'yes_no'},
+        {key:'special_approval_matters',question:'Are there important decisions that should require special approval beyond the ordinary board process?',answer_type:'yes_no'},
+        {key:'funder_governance',question:'Do funders, donors or strategic partners require specific governance protections or reporting rights?',answer_type:'yes_no'},
+        {key:'complex_governance',question:'Does the organisation have a governance structure that is more complex than a small board managing the NPC directly?',answer_type:'yes_no'},
+        {key:'pbo_or_18a',question:'Is the NPC applying for, or does it already have, PBO or Section 18A status?',answer_type:'yes_no'},
+        {key:'npo_registration',question:'Is the NPC also registered, or intended to be registered, as an NPO with the Department of Social Development?',answer_type:'yes_no'},
+        {key:'constitution_exists',question:'Does the organisation also use a separate Constitution or governance document?',answer_type:'yes_no'}
+      ];
+
+      const shortResult={
+        executive_summary:`EeziComply detected the prescribed standard short-form ${formName}. This is not a bespoke MOI, so the useful review is whether the standard governance framework remains suitable for how the organisation is actually owned and managed.`,
+        overall_commentary:`A short-form MOI should not attract artificial drafting criticisms simply because it does not contain detailed negotiated governance provisions. EeziComply will therefore assess suitability rather than manufacture clause defects.`,
+        overall_recommendation:`Answer the short business questions below. EeziComply will then tell you whether retaining the standard MOI is sensible or whether a customised replacement MOI should be considered. Any recommendation should be reviewed by an appropriately qualified legal or company-secretarial professional before reliance or filing.`,
+        overall_assessment:'review_required',
+        document_profile:{company_type:detection.company_type||'',moi_form:formName,notable_features:['Prescribed standard short-form MOI','Suitability review required rather than bespoke clause review']},
+        findings:[],
+        key_governance_map:{
+          board_appointment_and_removal:'Largely governed by the prescribed short-form/default statutory framework unless supplemented elsewhere.',
+          board_powers:'Largely governed by the prescribed short-form/default statutory framework.',
+          shareholder_reserved_matters:'No bespoke reserved-matters regime identified in the standard form.',
+          approval_thresholds:'Standard/default thresholds generally apply unless another valid governance arrangement changes the position.',
+          share_transfers_and_preemption:'No bespoke negotiated transfer regime should be assumed from the standard form alone.',
+          distributions:'Standard statutory/default position applies.',
+          meeting_and_voting_rules:'Standard statutory/default framework applies.',
+          amendment_rules:'A move to bespoke governance generally requires a proper MOI amendment/substitution process.'
+        },
+        priority_actions:[{priority:1,action:'Complete the short-form suitability questions',reason:'The correct recommendation depends on the company’s actual ownership, investor and governance needs rather than the length of the prescribed form.'}],
+        proposed_changes:[],
+        questions_for_company:questions.map((q:any)=>q.question),
+        limitations:['Suitability cannot be concluded until the company answers the short-form governance questions.']
+      };
+
+      await admin.from('eezicomply_moi_reviews').update({
+        status:'complete',
+        review_mode:'short_form_suitability',
+        detected_form:detection.detected_form,
+        form_detection_confidence:detection.confidence,
+        review_json:shortResult,
+        updated_at:new Date().toISOString(),
+        completed_at:new Date().toISOString()
+      }).eq('id',reviewId);
+
+      await admin.from('eezicomply_review_events').insert({
+        review_id:reviewId,owner_id:user.id,event_type:'short_form_detected',
+        event_data:{detected_form:detection.detected_form,confidence:detection.confidence}
+      });
+
+      return json({ok:true,review_id:reviewId,short_form_detected:true,detected_form:detection.detected_form,form_name:formName,detection,questions,result:shortResult});
+    }
+
+    await admin.from('eezicomply_moi_reviews').update({
+      review_mode:'customised_moi_review',
+      detected_form:detection.detected_form||'other_or_customised',
+      form_detection_confidence:detection.confidence||null,
+      updated_at:new Date().toISOString()
+    }).eq('id',reviewId);
+
     const schema={
       type:'object',
       additionalProperties:false,
