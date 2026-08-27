@@ -1,0 +1,21 @@
+/* Eezi Design System v1.0 — canonical tokens */
+:root{
+  --eezi-white:#ffffff;
+  --eezi-navy:#173f70;
+  --eezi-navy-dark:#102f57;
+  --eezi-orange:#f58220;
+  --eezi-orange-dark:#df7014;
+  --eezi-ink:#243447;
+  --eezi-muted:#667085;
+  --eezi-line:#dfe5eb;
+  --eezi-soft:#f7f8fa;
+  --eezi-success:#23845f;
+  --eezi-warning:#d99319;
+  --eezi-danger:#b42318;
+  --eezi-teal:#0d7e72;
+  --eezi-radius-sm:10px;
+  --eezi-radius-md:14px;
+  --eezi-radius-lg:18px;
+  --eezi-shadow-soft:0 8px 22px rgba(23,63,112,.07);
+}
+html,body{background:var(--eezi-white);color:var(--eezi-ink)}
