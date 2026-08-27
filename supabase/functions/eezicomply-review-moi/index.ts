@@ -94,10 +94,21 @@ Deno.serve(async(req:Request)=>{
           action:{type:'string'},
           reason:{type:'string'}
         },required:['priority','action','reason']}},
+        proposed_changes:{type:'array',items:{type:'object',additionalProperties:false,properties:{
+          change_key:{type:'string'},
+          title:{type:'string'},
+          clause_reference:{type:'string'},
+          current_position:{type:'string'},
+          proposed_change:{type:'string'},
+          reason:{type:'string'},
+          classification:{type:'string',enum:['required','recommended','optional']},
+          priority:{type:'string',enum:['high','medium','low']},
+          professional_verification_required:{type:'boolean'}
+        },required:['change_key','title','clause_reference','current_position','proposed_change','reason','classification','priority','professional_verification_required']}},
         questions_for_company:{type:'array',items:{type:'string'}},
         limitations:{type:'array',items:{type:'string'}}
       },
-      required:['executive_summary','overall_commentary','overall_recommendation','overall_assessment','document_profile','findings','key_governance_map','priority_actions','questions_for_company','limitations']
+      required:['executive_summary','overall_commentary','overall_recommendation','overall_assessment','document_profile','findings','key_governance_map','priority_actions','proposed_changes','questions_for_company','limitations']
     };
 
     const client=new OpenAI({apiKey:openaiKey});
@@ -127,6 +138,9 @@ STRICT RULES:
 - Where several clauses interact, comment on the combined effect.
 - The overall_commentary should read like the opening analysis ChatGPT would give after reading the full MOI.
 - The overall_recommendation should tell management what to do next, in priority order, in clear prose.
+- For every amendment you recommend, create a proposed_changes item with a stable change_key and usable replacement drafting. Do not merely say "amend clause". Draft the substance of the change the user could accept.
+- proposed_changes must distinguish required, recommended and optional changes. Do not force optional governance preferences on the user.
+- A proposed change should be sufficiently specific that, if accepted, a later drafting step can incorporate it into a complete revised MOI without guessing the intended amendment.
 - Be specific and decision-useful. Depth is preferable to superficial brevity.`,
       input:[{role:'user',content:[
         {type:'input_text',text:`Organisation: ${review.organisation_name||'Not supplied'}\nFilename: ${review.original_filename||'MOI'}\nPerform a complete standalone MOI governance and compliance review.`},
@@ -136,6 +150,23 @@ STRICT RULES:
     } as any,{signal:AbortSignal.timeout(130000)});
 
     const result=JSON.parse(response.output_text||'{}');
+
+    const proposedChanges=Array.isArray(result.proposed_changes)?result.proposed_changes:[];
+    if(proposedChanges.length){
+      await admin.from('eezicomply_moi_change_decisions').upsert(
+        proposedChanges.map((c:any)=>({
+          review_id:reviewId,
+          owner_id:user.id,
+          change_key:c.change_key,
+          title:c.title,
+          clause_reference:c.clause_reference||null,
+          proposed_change:c.proposed_change,
+          decision:'pending',
+          updated_at:new Date().toISOString()
+        })),
+        {onConflict:'review_id,change_key',ignoreDuplicates:false}
+      );
+    }
 
     await admin.from('eezicomply_moi_reviews').update({
       status:'complete',
