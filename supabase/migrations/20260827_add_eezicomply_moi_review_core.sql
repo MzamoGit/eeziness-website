@@ -8,6 +8,9 @@ create table public.eezicomply_moi_reviews (
   storage_path text,
   mime_type text,
   review_json jsonb,
+  revised_moi_text text,
+  next_steps_json jsonb,
+  revision_generated_at timestamptz,
   last_error text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -82,3 +85,41 @@ with check (bucket_id='eezicomply-moi' and (storage.foldername(name))[1]=(select
 create policy "MOI owners can delete files"
 on storage.objects for delete to authenticated
 using (bucket_id='eezicomply-moi' and (storage.foldername(name))[1]=(select auth.uid())::text);
+
+
+create table public.eezicomply_moi_change_decisions (
+  id uuid primary key default gen_random_uuid(),
+  review_id uuid not null references public.eezicomply_moi_reviews(id) on delete cascade,
+  owner_id uuid not null references auth.users(id) on delete cascade,
+  change_key text not null,
+  title text not null,
+  clause_reference text,
+  proposed_change text not null,
+  decision text not null default 'pending'
+    check (decision in ('pending','accepted','rejected')),
+  user_note text,
+  decided_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique(review_id, change_key)
+);
+
+create index eezicomply_moi_change_decisions_review_idx
+on public.eezicomply_moi_change_decisions(review_id);
+
+alter table public.eezicomply_moi_change_decisions enable row level security;
+
+create policy "Owners can read MOI change decisions"
+on public.eezicomply_moi_change_decisions for select to authenticated
+using ((select auth.uid()) = owner_id);
+
+create policy "Owners can create MOI change decisions"
+on public.eezicomply_moi_change_decisions for insert to authenticated
+with check ((select auth.uid()) = owner_id);
+
+create policy "Owners can update MOI change decisions"
+on public.eezicomply_moi_change_decisions for update to authenticated
+using ((select auth.uid()) = owner_id)
+with check ((select auth.uid()) = owner_id);
+
+grant select, insert, update on public.eezicomply_moi_change_decisions to authenticated;
