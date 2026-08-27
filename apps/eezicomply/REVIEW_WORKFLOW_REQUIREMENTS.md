@@ -65,3 +65,19 @@ Each checklist step must explain:
 - how the user knows the step is complete.
 
 This workflow is a core EeziComply requirement, not an optional enhancement.
+
+
+## Professional review rule — global and mandatory
+Every substantive piece of advice, suggestion, recommendation, proposed amendment, drafting change or next-step instruction produced by EeziComply must also recommend review by an appropriately qualified professional before the user relies on it, adopts it, signs it or files it.
+
+This rule applies across all EeziComply services, including:
+- MOI Review;
+- Shareholders' Agreement Review;
+- MOI ↔ Shareholders' Agreement Alignment Review;
+- company-secretarial workflows;
+- EeziNPO; and
+- generated or revised governance documents.
+
+The professional-review recommendation must be proportionate and useful. It must not replace the substantive advice, reduce the review to generic disclaimers, or imply that EeziComply cannot prepare a practical working recommendation or draft.
+
+Where possible, identify the appropriate type of professional review, for example legal, tax, accounting, company-secretarial or governance review.
