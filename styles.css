@@ -314,3 +314,42 @@ h3{letter-spacing:-.025em}
 @media(max-width:740px){
   .layer-card{min-height:0}
 }
+
+
+.procurement-callout{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:170px 1fr auto;
+  gap:22px;
+  align-items:center;
+  padding:22px 24px;
+  border:1px solid #cfe5d8;
+  border-left:8px solid #15915f;
+  border-radius:16px;
+  background:#f7fcf9
+}
+.procurement-stat{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em;
+  color:#11684b
+}
+.procurement-callout h3{
+  margin-bottom:6px;
+  color:#173f70;
+  font-size:17px
+}
+.procurement-callout p{
+  margin-bottom:0;
+  color:#5f6f82;
+  font-size:12.5px
+}
+.specialist-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+@media(max-width:980px){
+  .procurement-callout{grid-template-columns:1fr}
+  .specialist-grid{grid-template-columns:1fr}
+}
