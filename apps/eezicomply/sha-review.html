@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EeziComply | Shareholders' Agreement Review</title>
+<style>
+:root{--navy:#102445;--gold:#b88a2c;--green:#18794e;--red:#a33a35;--ink:#172033;--muted:#667085;--line:#dbe1ea;--bg:#f5f7fb;--soft:#eef3f9}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.48}.wrap{max-width:1050px;margin:auto;padding:0 20px}.topbar{height:66px;background:#fff;border-bottom:1px solid var(--line)}.topbar .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{font-size:23px;font-weight:800;color:var(--navy)}.brand span{color:var(--gold)}a{text-decoration:none;color:inherit}.hero{background:#fff;padding:62px 0 44px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.09em;color:var(--gold)}h1{font-size:43px;line-height:1.08;color:var(--navy);margin:10px 0 15px}h2,h3{color:var(--navy)}.lead{font-size:18px;color:#4b596e;max-width:800px}.notice{background:#fff6df;border:1px solid #ecd7a8;padding:13px 15px;border-radius:10px;font-size:13px;margin-top:22px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin:20px 0;box-shadow:0 3px 12px #1024450a}.hidden{display:none!important}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;color:#344054;margin-bottom:6px}.field input{width:100%;padding:11px 12px;border:1px solid #cbd4df;border-radius:9px;font:inherit}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn,button{border:0;border-radius:9px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}.primary{background:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.muted{color:var(--muted)}.status{padding:13px 15px;border-radius:10px;margin:14px 0}.info{background:#edf5ff}.error{background:#fdecec;color:#8c2e2a}.success{background:#e9f8ef;color:#17623f}.summary{font-size:16px}.finding{border:1px solid var(--line);border-left:5px solid #98a2b3;border-radius:10px;padding:15px;margin:10px 0;background:#fff}.finding[data-severity="critical"]{border-left-color:#a33a35}.finding[data-severity="material"]{border-left-color:#d47b18}.finding[data-severity="moderate"]{border-left-color:#b88a2c}.finding-head{display:flex;justify-content:space-between;gap:12px}.pill{font-size:10px;font-weight:800;border-radius:999px;padding:4px 8px;background:var(--soft);white-space:nowrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.map-card{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:13px}.map-card b{display:block;color:var(--navy);margin-bottom:5px}.priority{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;border-top:1px solid var(--line);padding:12px 0}.priority:first-child{border-top:0}.priority span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:800;font-size:12px}@media(max-width:700px){h1{font-size:34px}.grid{grid-template-columns:1fr}.finding-head{display:block}.pill{display:inline-block;margin-top:6px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap"><a class="brand" href="/">Eezi<span>Comply</span></a><a class="secondary btn" href="/">Back to EeziComply</a></div></header>
+<section class="hero"><div class="wrap"><div class="eyebrow">GOVERNANCE DOCUMENT REVIEW</div><h1>Shareholders' Agreement Review</h1><p class="lead">Upload your Shareholders' Agreement. EeziComply will explain the bargain it creates, identify material governance and commercial risks, highlight unusual or one-sided provisions, and recommend specific changes for you to accept or reject.</p><div class="notice"><strong>Professional review:</strong> Every substantive recommendation should be reviewed by an appropriately qualified professional before reliance, signature or implementation. EeziComply still provides the practical analysis and working drafting you need.</div></div></section>
+<main class="wrap">
+<section id="authPanel" class="panel">
+<h2>Sign in to review a Shareholders' Agreement</h2>
+<p class="muted">Your uploaded agreement and review results are stored privately under your account.</p>
+<div class="field"><label>Email</label><input id="email" type="email" autocomplete="email"></div>
+<div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div>
+<div class="actions"><button id="signIn" class="primary">Sign in</button><button id="signUp" class="secondary">Create account</button></div>
+<div id="authMsg"></div>
+</section>
+
+<section id="reviewPanel" class="panel hidden">
+<h2>Start a Shareholders' Agreement Review</h2>
+<div class="field"><label>Company / organisation name</label><input id="orgName" placeholder="e.g. Example Trading (Pty) Ltd"></div>
+<div class="field"><label>Shareholders' Agreement</label><input id="shaFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></div>
+<div class="actions"><button id="runReview" class="primary">Upload & review agreement</button><button id="signOut" class="secondary">Sign out</button></div>
+<div id="reviewMsg"></div>
+</section>
+
+<section id="resultPanel" class="hidden">
+<div class="panel"><div class="eyebrow">EXECUTIVE REVIEW</div><h2 id="assessmentTitle"></h2><p id="summary" class="summary"></p><h3>EeziComply commentary</h3><p id="overallCommentary"></p><h3>Recommended way forward</h3><p id="overallRecommendation"></p></div>
+<div class="panel"><h2>Key governance map</h2><div id="governanceMap" class="grid"></div></div>
+<div class="panel"><h2>Findings</h2><div id="findings"></div></div>
+<div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
+<div class="panel"><div class="eyebrow">RECOMMENDED CHANGES</div><h2>Review and accept changes</h2><p class="muted">EeziComply will incorporate only changes you accept. Reject any recommendation you do not want included, and add a note where shareholders want a different commercial position.</p><div id="proposedChanges"></div><div class="actions"><button id="generateRevised" class="primary hidden">Generate revised agreement & next-step checklist</button></div><div id="revisionMsg"></div></div>
+<div class="panel"><h2>Questions for shareholders</h2><ul id="questions"></ul></div>
+<div id="revisionPanel" class="panel hidden"><div class="eyebrow">REVISED AGREEMENT</div><h2>Revised Shareholders' Agreement</h2><div id="professionalReview" class="notice"></div><pre id="revisedSha" style="white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;line-height:1.55"></pre><h2>What to do next</h2><div id="nextSteps"></div></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+<script>
+const {createClient}=supabase;
+const sb=createClient('https://ttefsapyjuczmuhtlfqj.supabase.co','sb_publishable_RXurqZIvpP22Xs6gZTb88A_Bnc9Mlh5');
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function msg(type,text){return '<div class="status '+type+'">'+text+'</div>'}
+function showSignedIn(){ $('authPanel').classList.add('hidden');$('reviewPanel').classList.remove('hidden') }
+async function auth(mode){const email=$('email').value.trim(),password=$('password').value;if(!email||!password){$('authMsg').innerHTML=msg('error','Enter email and password.');return}const r=mode==='signup'?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});if(r.error){$('authMsg').innerHTML=msg('error',esc(r.error.message));return}if(r.data.session)showSignedIn();else $('authMsg').innerHTML=msg('info','Check your email to complete account setup, then sign in.')}
+$('signIn').onclick=()=>auth('signin');$('signUp').onclick=()=>auth('signup');$('signOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
+
+let currentReviewId=null;
+$('runReview').onclick=async()=>{
+ const file=$('shaFile').files[0],organisation_name=$('orgName').value.trim();
+ if(!file){$('reviewMsg').innerHTML=msg('error',"Upload a Shareholders' Agreement first.");return}
+ $('runReview').disabled=true;$('reviewMsg').innerHTML=msg('info','Uploading agreement…');
+ try{
+   const {data:{user}}=await sb.auth.getUser();if(!user)throw new Error('Please sign in again.');
+   const {data:review,error:createError}=await sb.from('eezicomply_sha_reviews').insert({owner_id:user.id,organisation_name,status:'draft',original_filename:file.name,mime_type:file.type}).select('*').single();
+   if(createError)throw createError;
+   currentReviewId=review.id;
+   const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'-'),path=user.id+'/'+review.id+'/'+Date.now()+'-'+safe;
+   const up=await sb.storage.from('eezicomply-sha').upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;
+   const saved=await sb.from('eezicomply_sha_reviews').update({storage_path:path,status:'uploaded',updated_at:new Date().toISOString()}).eq('id',review.id);if(saved.error)throw saved.error;
+   $('reviewMsg').innerHTML=msg('info',"EeziComply is reviewing the agreement…");
+   const fn=await sb.functions.invoke('eezicomply-review-sha',{body:{review_id:review.id}});if(fn.error)throw fn.error;if(fn.data?.error)throw new Error(fn.data.error);
+   render(fn.data.result,review.id);$('reviewMsg').innerHTML=msg('success',"Shareholders' Agreement Review complete.");
+ }catch(e){$('reviewMsg').innerHTML=msg('error',esc(e.message||e))}
+ finally{$('runReview').disabled=false}
+};
+
+function render(r,reviewId){
+ currentReviewId=reviewId||currentReviewId;$('resultPanel').classList.remove('hidden');
+ $('assessmentTitle').textContent=String(r.overall_assessment||'').replaceAll('_',' ');
+ $('summary').textContent=r.executive_summary||'';$('overallCommentary').textContent=r.overall_commentary||'';$('overallRecommendation').textContent=r.overall_recommendation||'';
+ const labels={board_composition_and_appointment:'Board composition & appointment',reserved_matters_and_vetoes:'Reserved matters & vetoes',shareholder_voting:'Shareholder voting',funding_obligations:'Funding obligations',information_rights:'Information rights',transfer_and_preemption:'Transfer & pre-emption',tag_and_drag:'Tag & drag',deadlock:'Deadlock',default_and_remedies:'Default & remedies',exit_and_valuation:'Exit & valuation'};
+ $('governanceMap').innerHTML=Object.entries(r.key_governance_map||{}).map(([k,v])=>'<div class="map-card"><b>'+esc(labels[k]||k)+'</b><span>'+esc(v)+'</span></div>').join('');
+ $('findings').innerHTML=(r.findings||[]).map(f=>'<article class="finding" data-severity="'+esc(f.severity)+'"><div class="finding-head"><h3>'+esc(f.title)+'</h3><span class="pill">'+esc(f.classification.replaceAll('_',' '))+' · '+esc(f.severity)+'</span></div><p><b>Clause:</b> '+esc(f.clause_reference||'Not identified')+'</p><p>'+esc(f.current_position)+'</p><p><b>EeziComply comment:</b> '+esc(f.chatgpt_comment||'')+'</p><p><b>Why it matters:</b> '+esc(f.why_it_matters)+'</p><p><b>Legal position:</b> '+esc(f.legal_position)+'</p><p><b>Recommendation:</b> '+esc(f.recommendation||f.recommended_action)+'</p><p><b>Professional review:</b> '+esc(f.professional_review_recommendation||'Have this recommendation reviewed by an appropriately qualified professional before relying on or implementing it.')+'</p><p><b>Implementation step:</b> '+esc(f.recommended_action)+'</p></article>').join('')||'<p class="muted">No material findings returned.</p>';
+ $('priorities').innerHTML=(r.priority_actions||[]).map(p=>'<div class="priority"><span>'+esc(p.priority)+'</span><div><b>'+esc(p.action)+'</b><br><small>'+esc(p.reason)+'</small></div></div>').join('');
+ const changes=r.proposed_changes||[];
+ $('proposedChanges').innerHTML=changes.map(c=>'<article class="finding"><div class="finding-head"><h3>'+esc(c.title)+'</h3><span class="pill">'+esc(c.classification)+' · '+esc(c.priority)+'</span></div><p><b>Clause:</b> '+esc(c.clause_reference||'Not identified')+'</p><p><b>Current position:</b> '+esc(c.current_position)+'</p><p><b>Recommended change:</b> '+esc(c.proposed_change)+'</p><p><b>Why:</b> '+esc(c.reason)+'</p><p><b>Professional review:</b> '+esc(c.professional_review_recommendation)+'</p><div class="actions"><button class="primary decisionBtn" data-key="'+esc(c.change_key)+'" data-decision="accepted">Accept</button><button class="secondary decisionBtn" data-key="'+esc(c.change_key)+'" data-decision="rejected">Reject</button></div><div class="field"><label>Optional note</label><input class="decisionNote" data-key="'+esc(c.change_key)+'" placeholder="Add context or a preferred commercial position"></div><div class="status info hidden" id="decision_'+esc(c.change_key)+'"></div></article>').join('')||'<p class="muted">No drafting changes proposed.</p>';
+ document.querySelectorAll('.decisionBtn').forEach(b=>b.onclick=()=>saveDecision(b.dataset.key,b.dataset.decision));
+ if(changes.length)$('generateRevised').classList.remove('hidden');
+ $('questions').innerHTML=(r.questions_for_shareholders||[]).map(q=>'<li>'+esc(q)+'</li>').join('')||'<li>No further shareholder questions identified.</li>';
+ $('resultPanel').scrollIntoView({behavior:'smooth'});
+}
+
+async function saveDecision(key,decision){
+ const {data:{user}}=await sb.auth.getUser();if(!user)return;
+ const note=document.querySelector('.decisionNote[data-key="'+CSS.escape(key)+'"]')?.value||'';
+ const r=await sb.from('eezicomply_sha_change_decisions').update({decision,user_note:note,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('review_id',currentReviewId).eq('change_key',key).eq('owner_id',user.id);
+ const e=$('decision_'+key);if(e){e.classList.remove('hidden');e.className='status '+(r.error?'error':'success');e.textContent=r.error?r.error.message:(decision==='accepted'?'Accepted. This change will be incorporated into the revised agreement.':'Rejected. This change will not be incorporated.')}
+}
+
+$('generateRevised').onclick=async()=>{
+ if(!currentReviewId)return;$('generateRevised').disabled=true;$('revisionMsg').innerHTML=msg('info','Preparing the revised agreement and detailed next-step checklist…');
+ try{
+   const fn=await sb.functions.invoke('eezicomply-generate-revised-sha',{body:{review_id:currentReviewId}});
+   if(fn.error)throw fn.error;if(fn.data?.error)throw new Error(fn.data.error);
+   $('professionalReview').textContent=fn.data.professional_review_recommendation||"Please have the revised Shareholders' Agreement reviewed by an appropriately qualified professional before signature or implementation.";
+   $('revisedSha').textContent=fn.data.revised_sha||'';
+   const steps=fn.data.next_steps||[];
+   $('nextSteps').innerHTML=steps.map((s,i)=>'<div class="priority"><span>'+(i+1)+'</span><div><b>'+esc(s.title)+'</b><p>'+esc(s.explanation)+'</p><p><b>What to do:</b></p><ul>'+((s.actions||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Who:</b> '+esc(s.responsible_person)+'</p><p><b>Evidence to keep:</b></p><ul>'+((s.evidence_to_keep||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Complete when:</b> '+esc(s.completion_test)+'</p><p><b>Professional review:</b> '+esc(s.professional_review_recommendation)+'</p></div></div>').join('');
+   $('revisionPanel').classList.remove('hidden');$('revisionPanel').scrollIntoView({behavior:'smooth'});$('revisionMsg').innerHTML=msg('success','Revised agreement and next-step checklist prepared.');
+ }catch(e){$('revisionMsg').innerHTML=msg('error',esc(e.message||e))}
+ finally{$('generateRevised').disabled=false}
+};
+
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)showSignedIn()})();
+</script>
+</body></html>
