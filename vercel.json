@@ -3,7 +3,14 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/", "destination": "/apps/eezicomply/index.html" },
-    { "source": "/sample.html", "destination": "/apps/eezicomply/sample.html" }
+    { "source": "/sample", "destination": "/apps/eezicomply/sample.html" },
+    { "source": "/sample.html", "destination": "/apps/eezicomply/sample.html" },
+    { "source": "/moi-review", "destination": "/apps/eezicomply/moi-review.html" },
+    { "source": "/moi-review.html", "destination": "/apps/eezicomply/moi-review.html" },
+    { "source": "/sha-review", "destination": "/apps/eezicomply/sha-review.html" },
+    { "source": "/sha-review.html", "destination": "/apps/eezicomply/sha-review.html" },
+    { "source": "/alignment-review", "destination": "/apps/eezicomply/alignment-review.html" },
+    { "source": "/alignment-review.html", "destination": "/apps/eezicomply/alignment-review.html" }
   ],
   "headers": [
     {
