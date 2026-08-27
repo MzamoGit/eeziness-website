@@ -56,6 +56,8 @@ Deno.serve(async(req:Request)=>{
       additionalProperties:false,
       properties:{
         executive_summary:{type:'string'},
+        overall_commentary:{type:'string'},
+        overall_recommendation:{type:'string'},
         overall_assessment:{type:'string',enum:['generally_sound','review_required','material_issues_identified']},
         document_profile:{type:'object',additionalProperties:false,properties:{
           company_type:{type:'string'},
@@ -69,12 +71,14 @@ Deno.serve(async(req:Request)=>{
           severity:{type:'string',enum:['critical','material','moderate','low','information']},
           clause_reference:{type:'string'},
           current_position:{type:'string'},
+          chatgpt_comment:{type:'string'},
           why_it_matters:{type:'string'},
           companies_act_position:{type:'string'},
+          recommendation:{type:'string'},
           recommended_action:{type:'string'},
           amendment_likely_required:{type:'boolean'},
           professional_verification_required:{type:'boolean'}
-        },required:['title','category','classification','severity','clause_reference','current_position','why_it_matters','companies_act_position','recommended_action','amendment_likely_required','professional_verification_required']}},
+        },required:['title','category','classification','severity','clause_reference','current_position','chatgpt_comment','why_it_matters','companies_act_position','recommendation','recommended_action','amendment_likely_required','professional_verification_required']}},
         key_governance_map:{type:'object',additionalProperties:false,properties:{
           board_appointment_and_removal:{type:'string'},
           board_powers:{type:'string'},
@@ -93,7 +97,7 @@ Deno.serve(async(req:Request)=>{
         questions_for_company:{type:'array',items:{type:'string'}},
         limitations:{type:'array',items:{type:'string'}}
       },
-      required:['executive_summary','overall_assessment','document_profile','findings','key_governance_map','priority_actions','questions_for_company','limitations']
+      required:['executive_summary','overall_commentary','overall_recommendation','overall_assessment','document_profile','findings','key_governance_map','priority_actions','questions_for_company','limitations']
     };
 
     const client=new OpenAI({apiKey:openaiKey});
@@ -108,6 +112,9 @@ STRICT RULES:
 - Distinguish clearly between: (1) legal requirement, (2) governance recommendation, (3) commercial/shareholder choice, and (4) information.
 - Do not label a negotiated commercial choice as unlawful merely because another drafting approach may be more common.
 - Identify unusual provisions, restrictions, reserved matters, director/shareholder powers, board appointment/removal rights, voting and approval thresholds, transfer restrictions, pre-emption rights, capital/securities provisions, distribution rules, meeting rules and MOI amendment requirements.
+- Write the review in the same standard a strong ChatGPT professional review would use: natural, analytical, nuanced and specific rather than checklist-like.
+- For every material finding, include a substantive "chatgpt_comment" explaining what you notice in the drafting, how you interpret it, and the practical significance.
+- For every material finding, include a "recommendation" written as direct professional advice to the company, not merely a system action label.
 - Explain the practical consequence in plain language.
 - Use the MOI's own clause/page references wherever possible.
 - Never invent a Companies Act section number. Cite a section number only when you are confident. If uncertain, state the Companies Act principle without fabricating a citation and mark professional verification required.
@@ -115,7 +122,12 @@ STRICT RULES:
 - This is NOT an MOI-versus-shareholders-agreement comparison. Do not infer SHA terms.
 - The output must say when an issue probably requires amendment versus when the company merely needs to understand the chosen governance position.
 - Recommend qualified legal/professional review for material legal conclusions, but do not make the entire output useless by disclaiming everything.
-- Be concise, specific and decision-useful.`,
+- Do not merely repeat clause wording. Add judgement, context and practical interpretation.
+- Where a clause is acceptable but unusual, say so explicitly and explain the trade-off rather than manufacturing a problem.
+- Where several clauses interact, comment on the combined effect.
+- The overall_commentary should read like the opening analysis ChatGPT would give after reading the full MOI.
+- The overall_recommendation should tell management what to do next, in priority order, in clear prose.
+- Be specific and decision-useful. Depth is preferable to superficial brevity.`,
       input:[{role:'user',content:[
         {type:'input_text',text:`Organisation: ${review.organisation_name||'Not supplied'}\nFilename: ${review.original_filename||'MOI'}\nPerform a complete standalone MOI governance and compliance review.`},
         {type:'input_file',file_url:signed.signedUrl}
