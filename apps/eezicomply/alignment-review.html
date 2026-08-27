@@ -35,6 +35,14 @@
 <div class="panel"><h2>Conflicts and proposed resolutions</h2><p class="muted">Accept or reject each proposed resolution. EeziComply will only incorporate resolutions you accept.</p><div id="conflicts"></div><div class="actions"><button id="generateAligned" class="primary hidden">Generate aligned MOI, aligned SHA & checklist</button></div><div id="revisionMsg"></div></div>
 <div class="panel"><h2>Priority actions</h2><div id="priorities"></div></div>
 <div class="panel"><h2>Questions for shareholders</h2><ul id="questions"></ul></div>
+<div id="professionalOutputsPanel" class="panel hidden">
+<div class="eyebrow">PROFESSIONAL OUTPUTS</div>
+<h2>Download professional documents</h2>
+<p class="muted">Generate a version-controlled EeziComply output pack. Word files are editable working documents; PDFs provide a stable reference copy. All outputs are marked Professional Review Required until appropriately reviewed.</p>
+<div class="actions"><button id="generateProfessionalOutputs" class="primary">Generate Word & PDF outputs</button></div>
+<div id="professionalOutputsMsg"></div>
+<div id="professionalOutputsList"></div>
+</div>
 <div id="draftPanel" class="panel hidden"><div class="eyebrow">ALIGNED WORKING DRAFTS</div><div id="professionalReview" class="notice"></div><div class="drafts"><div class="draftbox"><h2>Revised MOI</h2><pre id="revisedMoi"></pre></div><div class="draftbox"><h2>Revised Shareholders' Agreement</h2><pre id="revisedSha"></pre></div></div><h2>What to do next</h2><div id="nextSteps"></div></div>
 </section>
 </main>
@@ -63,7 +71,7 @@ $('runReview').onclick=async()=>{
 };
 
 function render(r,id){
- currentReviewId=id;$('resultPanel').classList.remove('hidden');$('assessmentTitle').textContent=String(r.alignment_assessment||'').replaceAll('_',' ');$('summary').textContent=r.executive_summary||'';$('commentary').textContent=r.overall_commentary||'';$('recommendation').textContent=r.overall_recommendation||'';
+ currentReviewId=id;$('resultPanel').classList.remove('hidden'); $('professionalOutputsPanel')?.classList.remove('hidden');$('assessmentTitle').textContent=String(r.alignment_assessment||'').replaceAll('_',' ');$('summary').textContent=r.executive_summary||'';$('commentary').textContent=r.overall_commentary||'';$('recommendation').textContent=r.overall_recommendation||'';
  $('comparisonMap').innerHTML=(r.comparison_map||[]).map(x=>'<div class="comparison"><div><b>'+esc(x.topic)+'</b></div><div>'+esc(x.moi_position)+'</div><div>'+esc(x.sha_position)+'<br><span class="pill">'+esc(x.alignment_status.replaceAll('_',' '))+'</span><p>'+esc(x.comment)+'</p></div></div>').join('');
  const conflicts=(r.conflicts||[]).filter(c=>c.conflict_type!=='no_conflict'&&c.target_document!=='none');
  $('conflicts').innerHTML=conflicts.map(c=>'<article class="conflict" data-severity="'+esc(c.severity)+'"><div class="conflict-grid"><div class="docbox"><b>MOI · '+esc(c.moi_reference||'No reference')+'</b>'+esc(c.moi_position)+'</div><div class="docbox"><b>SHA · '+esc(c.sha_reference||'No reference')+'</b>'+esc(c.sha_position)+'</div></div><h3>'+esc(c.topic)+'</h3><p><b>EeziComply comment:</b> '+esc(c.chatgpt_comment)+'</p><p><b>Precedence / legal position:</b> '+esc(c.legal_precedence_position)+'</p><p><b>Why it matters:</b> '+esc(c.why_it_matters)+'</p><p><b>Recommended resolution:</b> '+esc(c.recommended_resolution)+'</p><p><b>Document to change:</b> '+esc(c.target_document.toUpperCase())+'</p><p><b>Professional review:</b> '+esc(c.professional_review_recommendation)+'</p><div class="actions"><button class="primary decision" data-key="'+esc(c.change_key)+'" data-decision="accepted">Accept resolution</button><button class="secondary decision" data-key="'+esc(c.change_key)+'" data-decision="rejected">Reject</button></div><div class="field"><label>Optional note</label><input class="decisionNote" data-key="'+esc(c.change_key)+'" placeholder="Clarify the shareholders’ actual intention"></div><div class="status info hidden" id="decision_'+esc(c.change_key)+'"></div></article>').join('')||'<p class="muted">No document changes proposed.</p>';
@@ -73,6 +81,31 @@ function render(r,id){
 }
 async function saveDecision(key,decision){const {data:{user}}=await sb.auth.getUser();const note=document.querySelector('.decisionNote[data-key="'+CSS.escape(key)+'"]')?.value||'';const r=await sb.from('eezicomply_alignment_change_decisions').update({decision,user_note:note,decided_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq('review_id',currentReviewId).eq('change_key',key).eq('owner_id',user.id);const e=$('decision_'+key);if(e){e.classList.remove('hidden');e.className='status '+(r.error?'error':'success');e.textContent=r.error?r.error.message:(decision==='accepted'?'Accepted for aligned drafts.':'Rejected — this resolution will not be incorporated.')}}
 $('generateAligned').onclick=async()=>{if(!currentReviewId)return;$('generateAligned').disabled=true;$('revisionMsg').innerHTML=msg('info','Preparing both aligned documents and the implementation checklist…');try{const fn=await sb.functions.invoke('eezicomply-generate-aligned-documents',{body:{review_id:currentReviewId}});if(fn.error)throw fn.error;if(fn.data?.error)throw new Error(fn.data.error);$('professionalReview').textContent=fn.data.professional_review_recommendation||'Have both aligned documents reviewed by an appropriately qualified professional before adoption, signature or filing.';$('revisedMoi').textContent=fn.data.revised_moi||'';$('revisedSha').textContent=fn.data.revised_sha||'';$('nextSteps').innerHTML=(fn.data.next_steps||[]).map((s,i)=>'<div class="priority"><span>'+(i+1)+'</span><div><b>'+esc(s.title)+'</b><p>'+esc(s.explanation)+'</p><ul>'+((s.actions||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Who:</b> '+esc(s.responsible_person)+'</p><p><b>Evidence to keep:</b></p><ul>'+((s.evidence_to_keep||[]).map(a=>'<li>'+esc(a)+'</li>').join(''))+'</ul><p><b>Complete when:</b> '+esc(s.completion_test)+'</p><p><b>Professional review:</b> '+esc(s.professional_review_recommendation)+'</p></div></div>').join('');$('draftPanel').classList.remove('hidden');$('draftPanel').scrollIntoView({behavior:'smooth'});$('revisionMsg').innerHTML=msg('success','Aligned working drafts and checklist prepared.')}catch(e){$('revisionMsg').innerHTML=msg('error',esc(e.message||e))}finally{$('generateAligned').disabled=false}};
+
+async function generateProfessionalOutputsPack(){
+ if(!currentReviewId){$('professionalOutputsMsg').innerHTML=msg('error','Complete a review first.');return}
+ $('generateProfessionalOutputs').disabled=true;
+ $('professionalOutputsMsg').innerHTML=msg('info','Generating professional Word and PDF outputs…');
+ try{
+   const fn=await sb.functions.invoke('eezicomply-generate-governance-outputs',{body:{review_type:'alignment',review_id:currentReviewId}});
+   if(fn.error)throw fn.error;
+   if(fn.data?.error)throw new Error(fn.data.error);
+   const files=fn.data?.generated||[];
+   const byKind={};
+   files.forEach(x=>{(byKind[x.document_kind]??=[]).push(x)});
+   const kindLabel={review_report:'Review Report',implementation_checklist:'Implementation Checklist',revised_moi:'Revised MOI - Working Draft',revised_sha:"Revised Shareholders' Agreement - Working Draft"};
+   $('professionalOutputsList').innerHTML=Object.entries(byKind).map(([kind,items])=>{
+      return '<div class="finding"><h3>'+esc(kindLabel[kind]||kind)+'</h3><div class="actions">'+items.map(x=>'<a class="secondary btn" href="'+esc(x.download_url)+'" target="_blank" rel="noopener">Download '+esc(String(x.file_format||'').toUpperCase())+' · v'+esc(x.version)+'</a>').join('')+'</div><p class="muted">Status: Professional Review Required</p></div>';
+   }).join('')||'<p class="muted">No output files were generated.</p>';
+   $('professionalOutputsMsg').innerHTML=msg('success','Professional outputs generated and stored in the EeziComply company record.');
+ }catch(e){
+   $('professionalOutputsMsg').innerHTML=msg('error',esc(e.message||e));
+ }finally{
+   $('generateProfessionalOutputs').disabled=false;
+ }
+}
+$('generateProfessionalOutputs').onclick=generateProfessionalOutputsPack;
+
 (async()=>{const {data:{session}}=await sb.auth.getSession();if(session)showIn()})();
 </script>
 </body></html>
