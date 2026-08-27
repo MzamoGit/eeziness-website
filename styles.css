@@ -477,3 +477,22 @@ h3{letter-spacing:-.025em}
 @media(max-width:740px){
   .nasela-about-logo{width:165px}
 }
+
+/* Nasela logo: render as a clean transparent mark, not a pasted sticker */
+.nasela-about-logo{
+  display:block;
+  width:190px;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  mix-blend-mode:multiply;
+  filter:contrast(1.08);
+}
+@media(max-width:740px){
+  .nasela-about-logo{width:175px}
+}
