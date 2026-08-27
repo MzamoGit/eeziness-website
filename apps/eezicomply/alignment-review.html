@@ -7,6 +7,19 @@
 <style>
 :root{--navy:#102445;--gold:#b88a2c;--ink:#172033;--muted:#667085;--line:#dbe1ea;--bg:#f5f7fb;--soft:#eef3f9}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink);line-height:1.48}.wrap{max-width:1120px;margin:auto;padding:0 20px}.topbar{height:66px;background:#fff;border-bottom:1px solid var(--line)}.topbar .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}.brand{font-size:23px;font-weight:800;color:var(--navy)}.brand span{color:var(--gold)}a{text-decoration:none;color:inherit}.hero{background:#fff;padding:60px 0 42px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.09em;color:var(--gold)}h1{font-size:42px;line-height:1.08;color:var(--navy);margin:10px 0 15px}h2,h3{color:var(--navy)}.lead{font-size:18px;color:#4b596e;max-width:840px}.notice{background:#fff6df;border:1px solid #ecd7a8;padding:13px 15px;border-radius:10px;font-size:13px;margin-top:22px}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin:20px 0;box-shadow:0 3px 12px #1024450a}.hidden{display:none!important}.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:700;color:#344054;margin-bottom:6px}.field input{width:100%;padding:11px 12px;border:1px solid #cbd4df;border-radius:9px;font:inherit}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn,button{border:0;border-radius:9px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer}.primary{background:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}.muted{color:var(--muted)}.status{padding:13px 15px;border-radius:10px;margin:14px 0}.info{background:#edf5ff}.error{background:#fdecec;color:#8c2e2a}.success{background:#e9f8ef;color:#17623f}.conflict{border:1px solid var(--line);border-left:5px solid #d47b18;border-radius:10px;padding:15px;margin:12px 0;background:#fff}.conflict[data-severity="critical"]{border-left-color:#a33a35}.conflict-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.docbox{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:12px}.docbox b{display:block;color:var(--navy);margin-bottom:5px}.pill{font-size:10px;font-weight:800;border-radius:999px;padding:4px 8px;background:var(--soft);white-space:nowrap}.comparison{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;border-top:1px solid var(--line);padding:12px 0}.priority{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;border-top:1px solid var(--line);padding:12px 0}.priority span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:800}.drafts{display:grid;grid-template-columns:1fr 1fr;gap:14px}.draftbox{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fafbfd;max-height:620px;overflow:auto}.draftbox pre{white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;line-height:1.55}@media(max-width:760px){h1{font-size:34px}.conflict-grid,.comparison,.drafts{grid-template-columns:1fr}}
+
+.ask-review-fab{position:fixed;right:20px;bottom:22px;z-index:80;background:var(--navy);color:#fff;border-radius:999px;box-shadow:0 8px 24px #10244533}
+.ask-review-drawer{position:fixed;top:0;right:0;width:min(460px,100vw);height:100vh;background:#fff;z-index:100;border-left:1px solid var(--line);box-shadow:-10px 0 30px #10244522;padding:16px;display:flex;flex-direction:column}
+.ask-review-head{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px}
+.ask-review-head strong{display:block;color:var(--navy);font-size:18px}.ask-review-head span{display:block;color:var(--muted);font-size:12px}
+.ask-review-head button{background:#fff;border:1px solid var(--line);color:var(--navy);padding:7px 10px}
+.ask-review-conversation{flex:1;overflow:auto;padding:14px 0}
+.ask-bot,.ask-user{padding:11px 12px;border-radius:11px;margin:8px 0;line-height:1.58;font-size:13px}
+.ask-bot{background:#f5f7fb}.ask-user{background:#edf5ff;margin-left:45px}
+.ask-review-quick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.ask-review-quick button{padding:7px 9px;background:#fff;border:1px solid var(--line);font-size:11px;color:var(--navy)}
+.ask-review-drawer textarea{width:100%;border:1px solid #cbd4df;border-radius:9px;padding:10px;font:inherit;margin-bottom:8px}
+.ask-professional{margin-top:10px;padding:10px;border-radius:9px;background:#fff6df;border:1px solid #ecd7a8;color:#5f4816}
+.ask-source{margin-top:8px;color:var(--muted);font-size:11px}
 </style>
 </head>
 <body>
@@ -46,8 +59,56 @@
 <div id="draftPanel" class="panel hidden"><div class="eyebrow">ALIGNED WORKING DRAFTS</div><div id="professionalReview" class="notice"></div><div class="drafts"><div class="draftbox"><h2>Revised MOI</h2><pre id="revisedMoi"></pre></div><div class="draftbox"><h2>Revised Shareholders' Agreement</h2><pre id="revisedSha"></pre></div></div><h2>What to do next</h2><div id="nextSteps"></div></div>
 </section>
 </main>
+<button id="askReviewFab" class="ask-review-fab">Ask EeziComply</button>
+<aside id="askReviewDrawer" class="ask-review-drawer hidden">
+  <div class="ask-review-head"><div><strong>Ask EeziComply</strong><span>Detailed answers about this review</span></div><button id="askReviewClose">×</button></div>
+  <div id="askReviewConversation" class="ask-review-conversation"><div class="ask-bot">Ask me to explain a finding, recommendation, proposed change, legal/governance consequence, professional-review point, or what to do next.</div></div>
+  <div class="ask-review-quick"><button>Explain the most important finding</button><button>Why are these changes recommended?</button><button>What should I do next?</button></div>
+  <textarea id="askReviewQuestion" rows="4" placeholder="Ask in English, isiZulu or another language"></textarea>
+  <button id="askReviewSend" class="primary full">Ask EeziComply</button>
+</aside>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4">
+function askReviewOpen(){document.getElementById('askReviewDrawer').classList.remove('hidden')}
+function askReviewClose(){document.getElementById('askReviewDrawer').classList.add('hidden')}
+async function askReviewSend(){
+ const q=document.getElementById('askReviewQuestion').value.trim();if(!q)return;
+ const conv=document.getElementById('askReviewConversation');
+ conv.innerHTML+='<div class="ask-user">'+esc(q)+'</div>';
+ document.getElementById('askReviewQuestion').value='';
+ conv.innerHTML+='<div class="ask-bot" id="askReviewThinking">Thinking through this review…</div>';
+ conv.scrollTop=conv.scrollHeight;
+ try{
+   const fn=await sb.functions.invoke('ask-eezicomply',{body:{
+     company_id:selectedCompanyId||null,
+     review_type:'alignment',
+     review_id:currentReviewId||null,
+     question:q
+   }});
+   document.getElementById('askReviewThinking')?.remove();
+   if(fn.error)throw fn.error;
+   if(fn.data?.error)throw new Error(fn.data.error);
+   const actions=(fn.data.suggested_actions||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+   const missing=(fn.data.missing_information||[]).map(x=>'<li>'+esc(x)+'</li>').join('');
+   const sources=(fn.data.source_context||[]).map(x=>esc(x)).join(' · ');
+   conv.innerHTML+='<div class="ask-bot"><div>'+esc(fn.data.answer||'').replace(/\n/g,'<br>')+'</div>'+
+     (actions?'<br><b>Suggested actions</b><ul>'+actions+'</ul>':'')+
+     (missing?'<b>Information to confirm</b><ul>'+missing+'</ul>':'')+
+     (fn.data.professional_review_recommendation?'<div class="ask-professional"><b>Professional review</b><br>'+esc(fn.data.professional_review_recommendation)+'</div>':'')+
+     (sources?'<div class="ask-source">Context used: '+sources+'</div>':'')+
+     '</div>';
+ }catch(e){
+   document.getElementById('askReviewThinking')?.remove();
+   conv.innerHTML+='<div class="ask-bot">'+esc(e.message||'Ask EeziComply is temporarily unavailable.')+'</div>';
+ }
+ conv.scrollTop=conv.scrollHeight;
+}
+document.getElementById('askReviewFab').onclick=askReviewOpen;
+document.getElementById('askReviewClose').onclick=askReviewClose;
+document.getElementById('askReviewSend').onclick=askReviewSend;
+document.querySelectorAll('.ask-review-quick button').forEach(b=>b.onclick=()=>{document.getElementById('askReviewQuestion').value=b.textContent;askReviewSend()});
+
+</script>
 <script>
 const {createClient}=supabase;const sb=createClient('https://anzxbtjwpunglltlbpyn.supabase.co','sb_publishable__qh5R8tareIzMucpJ7pW5g_Ul0kV2JE');
 const $=id=>document.getElementById(id);
