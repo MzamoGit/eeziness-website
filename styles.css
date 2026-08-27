@@ -279,3 +279,38 @@ h3{letter-spacing:-.025em}
   .journey-strip>div{min-height:0}
   .belief-card,.nasela-story{padding:22px}
 }
+
+
+/* SME readiness layers */
+.readiness-layers{margin-top:24px}
+.layers-intro{max-width:850px;margin-bottom:18px}
+.layers-intro h2{font-size:clamp(24px,2.7vw,34px)}
+.layers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.layer-card{
+  padding:22px;
+  border:1px solid #dfe6ec;
+  border-radius:16px;
+  background:#fff;
+  min-height:210px
+}
+.layer-card:nth-child(1){border-top:6px solid #173f70}
+.layer-card.growth-layer{border-top:6px solid #15915f;background:#f7fcf9}
+.layer-card.founder-layer{border-top:6px solid #db7a16;background:#fffaf4}
+.layer-kicker{
+  display:block;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.09em;
+  color:#64748b;
+  margin-bottom:12px
+}
+.layer-card h3{font-size:18px;color:#173f70;margin-bottom:8px}
+.layer-card p{font-size:12.5px;color:#5f6f82;margin-bottom:0;line-height:1.55}
+.core-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.specialist-row{margin-top:34px}
+@media(max-width:980px){
+  .layers-grid,.core-grid{grid-template-columns:1fr}
+}
+@media(max-width:740px){
+  .layer-card{min-height:0}
+}
