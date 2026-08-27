@@ -81,3 +81,24 @@ This rule applies across all EeziComply services, including:
 The professional-review recommendation must be proportionate and useful. It must not replace the substantive advice, reduce the review to generic disclaimers, or imply that EeziComply cannot prepare a practical working recommendation or draft.
 
 Where possible, identify the appropriate type of professional review, for example legal, tax, accounting, company-secretarial or governance review.
+
+
+## Standard short-form MOIs
+EeziComply must detect prescribed standard short-form MOIs before ordinary clause review.
+
+Where CoR 15.1A or CoR 15.1C is reliably detected:
+- switch from bespoke clause critique to a suitability review;
+- do not manufacture findings merely because the prescribed form is short or lacks negotiated provisions;
+- ask only plain-language business/governance questions that the user can reasonably answer;
+- permit a positive outcome of retaining the standard MOI;
+- explain what future trigger events should cause the company to review the MOI again;
+- recommend MOI ↔ Shareholders' Agreement Alignment Review where a SHA exists or is being negotiated;
+- provide professional-review advice with every substantive recommendation.
+
+If bespoke governance changes are recommended:
+- propose each specific change separately;
+- let the user accept/reject each change;
+- if accepted, prepare a complete customised/replacement MOI rather than attempting to edit the prescribed short-form template;
+- provide the detailed explanatory approval, filing, record-update and professional-review checklist.
+
+The product question for a short-form MOI is: "Is this standard MOI still suitable for this organisation?" not "How many clauses can EeziComply criticise?"
