@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102445">
+  <meta name="description" content="EeziComply is an AI-enabled company-secretarial, governance and compliance enabler for South African SMEs.">
+  <title>EeziComply | Company Secretary in your pocket</title>
+  <style>
+    :root{--navy:#102445;--navy2:#173f70;--gold:#b88a2c;--orange:#f58220;--ink:#243447;--muted:#667085;--line:#dfe5eb;--soft:#f7f8fa;--green:#23845f;--teal:#0d7e72}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--ink);line-height:1.5}
+    a{text-decoration:none;color:inherit}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+    .head{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{font-size:26px;font-weight:900;letter-spacing:-.6px;color:var(--navy)}.brand span{color:var(--gold)}
+    .back{font-size:13px;font-weight:700;color:var(--navy)}
+    .hero{padding:64px 0 46px;background:radial-gradient(circle at 90% 10%,rgba(184,138,44,.12),transparent 30%),linear-gradient(180deg,#fff,#fbfcfd)}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:38px;align-items:start}
+    .eyebrow{font-size:11px;letter-spacing:.1em;font-weight:900;color:var(--gold);margin-bottom:12px}
+    h1{font-size:clamp(38px,5vw,58px);line-height:1.02;letter-spacing:-.045em;color:var(--navy);margin:0 0 18px}
+    .lead{font-size:18px;color:#526176;max-width:720px;margin:0}
+    .hero-note{margin-top:24px;padding:15px 17px;border-left:5px solid var(--gold);background:#fff9ed;border-radius:10px;color:#5f5646;font-size:13px}
+    .hero-card{background:var(--navy);color:#fff;border-radius:20px;padding:26px;box-shadow:0 18px 40px rgba(16,36,69,.14)}
+    .hero-card h2{margin:0 0 8px;font-size:24px}.hero-card p{margin:0 0 16px;color:#dce5f0}
+    .flow{display:grid;gap:8px}.flow div{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #ffffff1f}
+    .flow b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#fff;font-size:11px}.flow span{font-size:13px}
+    .section{padding:48px 0}.section h2{font-size:30px;color:var(--navy);margin:0 0 8px}.section-intro{color:var(--muted);margin:0 0 24px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .card{position:relative;display:flex;flex-direction:column;min-height:230px;padding:20px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 20px rgba(23,63,112,.05)}
+    .card.live{border-top:5px solid var(--green)}.card.pilot{border-top:5px solid var(--gold)}.card.special{border-top:5px solid var(--orange)}.card.core{border-top:5px solid var(--navy2)}
+    .status{display:inline-flex;width:max-content;padding:5px 8px;border-radius:999px;background:#eef2f6;color:#546274;font-size:9px;font-weight:900;letter-spacing:.06em}
+    .status.live{background:#e9f7f0;color:#17663f}.status.special{background:#fff0df;color:#b85f10}
+    .card h3{font-size:19px;color:var(--navy);margin:14px 0 8px}.card p{font-size:13px;color:var(--muted);margin:0 0 12px}
+    .card ul{padding-left:18px;margin:0 0 16px;color:#536273;font-size:12px}.card li{margin:4px 0}
+    .action{margin-top:auto;display:inline-flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;color:var(--navy)}
+    .action.gold{color:#956d1b}.action.orange{color:#c46817}
+    .principles{background:#f8fafc;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .principle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .principle{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px}.principle b{display:block;color:var(--navy);margin-bottom:6px}.principle span{font-size:12px;color:var(--muted)}
+    .footnote{margin-top:22px;font-size:12px;color:#6b7280;padding:14px 16px;background:#fff9ed;border:1px solid #ecdcb6;border-radius:12px}
+    footer{padding:28px 0 36px}.footer{display:flex;justify-content:space-between;gap:16px;align-items:center;border-top:1px solid var(--line);padding-top:22px;color:#708094;font-size:12px}
+    @media(max-width:860px){.hero-grid,.grid{grid-template-columns:1fr 1fr}.hero-grid{grid-template-columns:1fr}.principle-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:620px){.wrap{width:min(100% - 28px,1120px)}.head{height:66px}.brand{font-size:23px}.hero{padding:42px 0 34px}.lead{font-size:16px}.grid,.principle-grid{grid-template-columns:1fr}.card{min-height:0}.section{padding:38px 0}.section h2{font-size:26px}.footer{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<header><div class="wrap head"><a class="brand" href="/"><b>Eezi</b><span>Comply</span></a><a class="back" href="/">← EeziNess</a></div></header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">AI-ENABLED COMPANY SECRETARIAL • GOVERNANCE • COMPLIANCE</div>
+      <h1>Company Secretary<br>in your pocket.</h1>
+      <p class="lead">EeziComply is the umbrella enabler for the company-secretarial, governance and compliance work a growing South African business needs to keep under control. Choose the task you need help with; EeziComply guides the process, prepares the right records and tells you what to do next.</p>
+      <div class="hero-note"><strong>Beneficial Ownership is one EeziComply enabler — not EeziComply itself.</strong> The same platform is being extended across governance documents, company records, statutory actions and specialist nonprofit compliance.</div>
+    </div>
+    <aside class="hero-card">
+      <div class="eyebrow" style="color:#f4cf7e">HOW EEZICOMPLY WORKS</div>
+      <h2>Start with what happened.</h2>
+      <p>Tell EeziComply what your company needs to do. The workflow then follows the legal and governance logic.</p>
+      <div class="flow">
+        <div><b>1</b><span>Understand the company event or obligation</span></div>
+        <div><b>2</b><span>Determine approvals, information and evidence required</span></div>
+        <div><b>3</b><span>Prepare documents, registers and next-step guidance</span></div>
+        <div><b>4</b><span>Keep the company record organised for future reuse</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<main>
+  <section class="section" id="enablers">
+    <div class="wrap">
+      <div class="eyebrow">INSIDE EEZICOMPLY</div>
+      <h2>One umbrella. Multiple compliance enablers.</h2>
+      <p class="section-intro">Use the enabler that matches the task. The shared company record, document intelligence and Ask EeziComply layer are designed to work across them.</p>
+      <div class="grid">
+        <article class="card live">
+          <span class="status live">PILOT</span>
+          <h3>Beneficial Ownership</h3>
+          <p>Prepare for CIPC beneficial-ownership filing without treating the filing form as the whole compliance problem.</p>
+          <ul><li>Readiness and evidence checks</li><li>Ownership tracing and registers</li><li>Personalised filing pack and guidance</li></ul>
+          <a class="action gold" href="https://eezicomply-pilot.vercel.app">Open UBO enabler <span>→</span></a>
+        </article>
+
+        <article class="card pilot">
+          <span class="status">PILOT BUILD</span>
+          <h3>Governance Document Reviews</h3>
+          <p>AI-assisted review of the governance documents that determine how the company should operate.</p>
+          <ul><li>MOI review</li><li>Shareholders’ Agreement review</li><li>MOI ↔ SHA alignment and recommended changes</li></ul>
+        </article>
+
+        <article class="card core">
+          <span class="status">IN DEVELOPMENT</span>
+          <h3>Company Secretarial</h3>
+          <p>Guided recurring company-secretarial actions, with the right approvals and records prepared as part of the workflow.</p>
+          <ul><li>Director changes and annual returns</li><li>Shares, registers and certificates</li><li>Resolutions, minutes and compliance calendar</li></ul>
+        </article>
+
+        <article class="card core">
+          <span class="status">FOUNDATION</span>
+          <h3>Company Record & Vault</h3>
+          <p>Keep company information and source evidence in one reusable record instead of rebuilding the file for every task.</p>
+          <ul><li>Reusable company documents</li><li>People, ownership and governance records</li><li>Source evidence linked to outputs</li></ul>
+        </article>
+
+        <article class="card core">
+          <span class="status">CORE CAPABILITY</span>
+          <h3>Ask EeziComply</h3>
+          <p>A conversational company-secretarial assistant designed to explain what is required, why it matters and what the user should do next.</p>
+          <ul><li>Plain-language explanations</li><li>Company-aware answers</li><li>Recommended actions and professional-review prompts</li></ul>
+        </article>
+
+        <article class="card special">
+          <span class="status special">SPECIALIST ENABLER</span>
+          <h3>Eezi<span style="color:var(--orange)">NPO</span></h3>
+          <p>The nonprofit specialist within EeziComply, covering the different registration, governance and compliance needs of NPCs and NPOs.</p>
+          <ul><li>NPC / NPO / PBO / Section 18A readiness</li><li>Governing-document alignment</li><li>Ongoing nonprofit compliance</li></ul>
+          <a class="action orange" href="https://eezinpo-pilot.vercel.app">Open EeziNPO <span>→</span></a>
+        </article>
+      </div>
+      <div class="footnote"><strong>Professional review remains recommended.</strong> EeziComply can guide, analyse and prepare documents, but important legal, tax and governance outputs should be reviewed by an appropriately qualified professional where circumstances warrant it.</div>
+    </div>
+  </section>
+
+  <section class="section principles">
+    <div class="wrap">
+      <div class="eyebrow">THE EEZICOMPLY APPROACH</div>
+      <h2>Not a collection of filing forms.</h2>
+      <p class="section-intro">Each enabler is designed around the underlying company action and the records that should exist after it is complete.</p>
+      <div class="principle-grid">
+        <div class="principle"><b>Understand first</b><span>Start with the company event, not the regulator’s form.</span></div>
+        <div class="principle"><b>Use what already exists</b><span>Read and reuse company information and evidence wherever possible.</span></div>
+        <div class="principle"><b>Prepare the record</b><span>Generate the approvals, registers, certificates and guidance the action requires.</span></div>
+        <div class="principle"><b>Keep it current</b><span>Leave the company better organised for the next compliance or governance task.</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap footer"><span>EeziComply is an EeziNess enabler developed by Nasela Capital.</span><a href="/">Back to EeziNess</a></div></footer>
+</body>
+</html>
