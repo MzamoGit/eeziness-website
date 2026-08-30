@@ -27,7 +27,7 @@ if (hero && !document.querySelector('.ownership-strip')) {
       <img src="${naselaLogo}" alt="Nasela Capital" class="nasela-logo" />
       <div class="ownership-copy">
         <span class="ownership-kicker">A NASELA CAPITAL INNOVATION</span>
-        <strong>The Eezi product family is developed and owned by Nasela Capital.</strong>
+        <strong>The Eezi enabler family is developed and owned by Nasela Capital.</strong>
         <span>Practical technology built around real business and everyday problems.</span>
       </div>
     </div>`;
@@ -36,7 +36,7 @@ if (hero && !document.querySelector('.ownership-strip')) {
 
 const footerBottom = document.querySelector('.footer-bottom');
 if (footerBottom) {
-  footerBottom.innerHTML = `© ${new Date().getFullYear()} Nasela Capital (Pty) Ltd. EeziNess and the Eezi product family are products of Nasela Capital.`;
+  footerBottom.innerHTML = `© ${new Date().getFullYear()} Nasela Capital (Pty) Ltd. EeziNess and the Eezi enabler family are developed and owned by Nasela Capital.`;
 }
 
 const siteTreatment = document.createElement('style');
@@ -79,6 +79,7 @@ siteTreatment.textContent = `
   .orbit-card.c4 { background:linear-gradient(145deg,#ffffff,#def9f6); border-color:#9ddfd8; }
   .orbit-card.c5 { background:linear-gradient(145deg,#ffffff,#fff0d7); border-color:#efc47f; }
   .orbit-card.c6 { background:linear-gradient(145deg,#ffffff,#ffe5e9); border-color:#efa7b2; }
+  .orbit-card.c7 { background:linear-gradient(145deg,#ffffff,#e8f9fd); border-color:#a8dfe9; }
   .panel-bottom { color:#665b73; }
   .panel-bottom i { background:linear-gradient(90deg,#efc47f,#9fdfbd,#d3aff2,#efa7b2); }
   .hero .btn-primary { background:var(--navy); box-shadow:0 12px 24px rgba(7,28,54,.18); }
