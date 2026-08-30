@@ -154,7 +154,7 @@ siteTreatment.textContent = `
       font-size:22px;
     }
     .orbit-card,
-    .orbit-card.c1,.orbit-card.c2,.orbit-card.c3,.orbit-card.c4,.orbit-card.c5,.orbit-card.c6 {
+    .orbit-card.c1,.orbit-card.c2,.orbit-card.c3,.orbit-card.c4,.orbit-card.c5,.orbit-card.c6,.orbit-card.c7 {
       position:relative !important;
       inset:auto !important;
       left:auto !important;
@@ -167,6 +167,14 @@ siteTreatment.textContent = `
       padding:13px;
       border-radius:16px;
     }
+    .orbit-card.c7 {
+      grid-column:1 / -1;
+      min-height:88px;
+      background:linear-gradient(145deg,#ffffff,#e8f9fd);
+      border-color:#8ed4e2;
+      border-top-width:5px;
+    }
+    .orbit-card.c7 b { font-size:15px; }
     .orbit-card b { font-size:13px; }
     .orbit-card small { font-size:11px; }
     .panel-bottom {
