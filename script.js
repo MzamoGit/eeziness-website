@@ -170,8 +170,8 @@ siteTreatment.textContent = `
     .orbit-card.c7 {
       grid-column:1 / -1;
       min-height:88px;
-      background:linear-gradient(145deg,#ffffff,#e8f9fd);
-      border-color:#8ed4e2;
+      background:linear-gradient(145deg,#ffffff,#eaf8f7);
+      border-color:#9edbd9;
       border-top-width:5px;
     }
     .orbit-card.c7 b { font-size:15px; }
@@ -194,6 +194,13 @@ siteTreatment.textContent = `
     .nasela-logo { width:125px; margin:0 auto; }
     .ownership-copy strong { font-size:14px; }
     .ownership-copy > span:last-child { font-size:12px; }
+    .orbit-card.c4 { border-top-color:#2fa66a !important; }
+    .orbit-card.c5,.orbit-card.c6 { border-top-color:#f58220 !important; }
+    .orbit-card.c7 { border-top-color:#059b9a !important; }
+    .orbit-card .name-debt>span:last-child { color:#2fa66a !important; }
+    .orbit-card .name-fund>span:last-child,
+    .orbit-card .name-bid>span:last-child { color:#f58220 !important; }
+    .orbit-card .name-finance>span:last-child { color:#059b9a !important; }
   }
 `;
 document.head.appendChild(siteTreatment);
