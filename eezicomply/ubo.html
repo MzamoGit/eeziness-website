@@ -96,9 +96,125 @@ function renderApp(){showApp();nav();updateCaseHeader();loadFilingSwitcher();con
 
 function renderCompany(c){const x=state.pendingCompanyExtraction||state.company||{};c.innerHTML=shell('Add the company','Upload a CIPC company registration or disclosure document. EeziComply will read it first, then you simply review and confirm the details.',`<div class="card"><h3>Upload company registration document</h3><div class="dropzone"><label>Company registration / disclosure document<input id="companyIntakeFile" type="file" accept="application/pdf,image/jpeg,image/png,image/webp"></label><div class="actions"><button class="primary" id="readCompanyDoc">Upload & read company document</button></div><div id="companyReadMsg"></div></div></div><div class="card"><div class="section-title"><h3>Review company details</h3>${state.pendingCompanyExtraction?'<span class="tag ok">Prefilled from document</span>':'<span class="tag">Manual entry still available</span>'}</div><div class="form-grid">${field('Registered company name','coName',x.registered_name||'')}${field('Registration number','coReg',x.registration_number||'')}${select('Entity type','coType',[['','Select entity type'],['private','Private company'],['public','Public company'],['soc','State-owned company'],['npc','Non-profit company (NPC)'],['cc','Close corporation']],x.entity_type||'')}${field('Number of directors / members','coDirectors',x.director_member_count??'','number','min="1"')}${field('Incorporation / anniversary date','coAnniv',x.incorporation_date||x.anniversary_date||'','date')}${field('Company email','coEmail',x.contact_email||'','email')}${field('Company contact number','coPhone',x.contact_number||'','tel')}${field('Street address','coStreet',x.street_address||'','text','')}${field('Postal address (if different)','coPostal',x.postal_address||'','text','')}</div>${state.pendingCompanyExtraction?.document_summary?`<div class="success"><b>EeziComply read:</b> ${esc(state.pendingCompanyExtraction.document_summary)}</div>`:''}<div class="actions"><button class="primary" id="saveCompany">Confirm company & continue</button></div><div id="coMsg"></div></div>`,0,0);$('readCompanyDoc').onclick=readCompanyIntake;$('saveCompany').onclick=saveCompany}
 async function readCompanyIntake(){const file=$('companyIntakeFile').files[0];if(!file){$('companyReadMsg').innerHTML=msg('warning','Choose the company registration / disclosure PDF or image first.');return}if(file.size>50*1024*1024){$('companyReadMsg').innerHTML=msg('error','This file is larger than 50 MB.');return}const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'-'),path=`${state.user.id}/vault/company-intake/${Date.now()}-${safeName}`;$('companyReadMsg').innerHTML=msg('info','Uploading and reading the company document…');const up=await sb.storage.from('eezicomply-filings').upload(path,file,{contentType:file.type||'application/pdf',upsert:false});if(up.error){$('companyReadMsg').innerHTML=msg('error',esc(up.error.message));return}const r=await invokeFn('eezicomply-read-company-intake',{storagePath:path,mimeType:file.type||'application/pdf'});if(!r.ok){await sb.storage.from('eezicomply-filings').remove([path]);$('companyReadMsg').innerHTML=msg('error',esc(r.data.message||'EeziComply could not read this company document. You can still enter the details manually.'));return}state.pendingCompanyDoc={storage_path:path,original_filename:file.name,mime_type:file.type||'application/pdf',size_bytes:file.size};state.pendingCompanyExtraction=r.data.extraction||{};renderCompany($('stepContent'));toast('Company details extracted. Please review and confirm.')}
-async function saveCompany(){const creatingNewFiling=!state.filing;let resumedOpenFiling=false;const payload={registered_name:$('coName').value.trim(),registration_number:$('coReg').value.trim(),entity_type:$('coType').value,director_member_count:$('coDirectors').value?Number($('coDirectors').value):null,anniversary_date:$('coAnniv').value||null,incorporation_date:$('coAnniv').value||null,contact_email:$('coEmail').value.trim()||null,contact_number:$('coPhone').value.trim()||null,street_address:$('coStreet').value.trim()||null,postal_address:$('coPostal').value.trim()||null};if(!payload.registered_name||!payload.registration_number||!payload.entity_type){$('coMsg').innerHTML=msg('warning','Please confirm the registered name, registration number and entity type.');return}let companyId=state.company?.id;if(companyId){const r=await sb.from('eezicomply_companies').update(payload).eq('id',companyId);if(r.error){$('coMsg').innerHTML=msg('error',esc(r.error.message));return}}else{let existing=await sb.from('eezicomply_companies').select('*').eq('user_id',state.user.id).eq('registration_number',payload.registration_number).maybeSingle();if(existing.data){companyId=existing.data.id;const u=await sb.from('eezicomply_companies').update(payload).eq('id',companyId);if(u.error){$('coMsg').innerHTML=msg('error',esc(u.error.message));return}}else{const r=await sb.from('eezicomply_companies').insert({...payload,user_id:state.user.id}).select().single();if(r.error){$('coMsg').innerHTML=msg('error',esc(r.error.message));return}companyId=r.data.id}const open=creatingNewFiling?await sb.from('eezicomply_filings').select('*').eq('user_id',state.user.id).eq('company_id',companyId).neq('status','completed').order('updated_at',{ascending:false}).limit(1).maybeSingle():{data:null};if(open.data){state.filing=open.data;resumedOpenFiling=true}else{const f=await sb.from('eezicomply_filings').insert({user_id:state.user.id,company_id:companyId,status:'in_progress',current_step:2,filer_email:state.user.email}).select().single();if(f.error){$('coMsg').innerHTML=msg('error',esc(f.error.message));return}state.filing=f.data}
-if(state.pendingCompanyDoc&&state.filing){const e=state.pendingCompanyExtraction||{},docIns=await sb.from('eezicomply_documents').insert({user_id:state.user.id,filing_id:state.filing.id,document_type:'company_registration',display_name:`Company registration / disclosure record — ${payload.registered_name}`,storage_path:state.pendingCompanyDoc.storage_path,original_filename:state.pendingCompanyDoc.original_filename,mime_type:state.pendingCompanyDoc.mime_type,size_bytes:state.pendingCompanyDoc.size_bytes,status:'uploaded',ai_read_status:'completed',extracted_data:{detected_document_type:e.detected_document_type||'Company registration / disclosure record',document_summary:e.document_summary||'',company_name:e.registered_name||payload.registered_name,company_registration_number:e.registration_number||payload.registration_number,company_intake:e},discrepancies:[],confirmed_by_user:true,uploaded_at:new Date().toISOString(),verified_at:new Date().toISOString()}).select().single();if(docIns.error){$('coMsg').innerHTML=msg('error','Company was saved, but the uploaded registration document could not be attached: '+esc(docIns.error.message));return}const vIns=await sb.from('eezicomply_vault_documents').insert({user_id:state.user.id,scope_type:'company',company_id:companyId,document_type:'company_registration',display_name:docIns.data.display_name,storage_path:state.pendingCompanyDoc.storage_path,original_filename:state.pendingCompanyDoc.original_filename,mime_type:state.pendingCompanyDoc.mime_type,size_bytes:state.pendingCompanyDoc.size_bytes,ai_read_status:'completed',extracted_data:docIns.data.extracted_data,discrepancies:[],source_document_id:docIns.data.id,is_current:true,last_confirmed_at:new Date().toISOString()}).select().single();if(vIns.data){await sb.from('eezicomply_documents').update({vault_document_id:vIns.data.id,is_vault_reference:true,vault_confirmed_at:new Date().toISOString()}).eq('id',docIns.data.id);await sb.from('eezicomply_filing_vault_links').insert({user_id:state.user.id,filing_id:state.filing.id,vault_document_id:vIns.data.id,filing_document_id:docIns.data.id,status:'confirmed',confirmed_at:new Date().toISOString()})}state.pendingCompanyDoc=null;state.pendingCompanyExtraction=null}
-await refresh();if(resumedOpenFiling){state.step=Math.max(1,Math.min(10,state.filing.current_step||1));renderApp();toast('An in-progress filing already exists for this company. EeziComply opened it instead of creating a duplicate.')}else{toast('Company confirmed');go(2)}}
+async function saveCompany(){
+  const creatingNewFiling=!state.filing;
+  let resumedOpenFiling=false;
+  const payload={
+    registered_name:$('coName').value.trim(),
+    registration_number:$('coReg').value.trim(),
+    entity_type:$('coType').value,
+    director_member_count:$('coDirectors').value?Number($('coDirectors').value):null,
+    anniversary_date:$('coAnniv').value||null,
+    incorporation_date:$('coAnniv').value||null,
+    contact_email:$('coEmail').value.trim()||null,
+    contact_number:$('coPhone').value.trim()||null,
+    street_address:$('coStreet').value.trim()||null,
+    postal_address:$('coPostal').value.trim()||null
+  };
+  if(!payload.registered_name||!payload.registration_number||!payload.entity_type){
+    $('coMsg').innerHTML=msg('warning','Please confirm the registered name, registration number and entity type.');
+    return;
+  }
+
+  let companyId=state.company?.id;
+  if(companyId){
+    const r=await sb.from('eezicomply_companies').update(payload).eq('id',companyId);
+    if(r.error){$('coMsg').innerHTML=msg('error',esc(r.error.message));return}
+  }else{
+    const existing=await sb.from('eezicomply_companies').select('*').eq('user_id',state.user.id).eq('registration_number',payload.registration_number).maybeSingle();
+    if(existing.data){
+      companyId=existing.data.id;
+      const u=await sb.from('eezicomply_companies').update(payload).eq('id',companyId);
+      if(u.error){$('coMsg').innerHTML=msg('error',esc(u.error.message));return}
+    }else{
+      const r=await sb.from('eezicomply_companies').insert({...payload,user_id:state.user.id}).select().single();
+      if(r.error){$('coMsg').innerHTML=msg('error',esc(r.error.message));return}
+      companyId=r.data.id;
+    }
+
+    if(creatingNewFiling){
+      const open=await sb.from('eezicomply_filings').select('*').eq('user_id',state.user.id).eq('company_id',companyId).neq('status','completed').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+      if(open.data){
+        state.filing=open.data;
+        resumedOpenFiling=true;
+      }else{
+        const fr=await sb.from('eezicomply_filings').insert({user_id:state.user.id,company_id:companyId,status:'in_progress',current_step:2,filer_email:state.user.email}).select().single();
+        if(fr.error){$('coMsg').innerHTML=msg('error',esc(fr.error.message));return}
+        state.filing=fr.data;
+      }
+    }
+  }
+
+  if(resumedOpenFiling&&state.pendingCompanyDoc?.storage_path){
+    await sb.storage.from('eezicomply-filings').remove([state.pendingCompanyDoc.storage_path]);
+    state.pendingCompanyDoc=null;
+    state.pendingCompanyExtraction=null;
+  }
+
+  if(state.pendingCompanyDoc&&state.filing){
+    const e=state.pendingCompanyExtraction||{};
+    const docIns=await sb.from('eezicomply_documents').insert({
+      user_id:state.user.id,
+      filing_id:state.filing.id,
+      document_type:'company_registration',
+      display_name:`Company registration / disclosure record — ${payload.registered_name}`,
+      storage_path:state.pendingCompanyDoc.storage_path,
+      original_filename:state.pendingCompanyDoc.original_filename,
+      mime_type:state.pendingCompanyDoc.mime_type,
+      size_bytes:state.pendingCompanyDoc.size_bytes,
+      status:'uploaded',
+      ai_read_status:'completed',
+      extracted_data:{
+        detected_document_type:e.detected_document_type||'Company registration / disclosure record',
+        document_summary:e.document_summary||'',
+        company_name:e.registered_name||payload.registered_name,
+        company_registration_number:e.registration_number||payload.registration_number,
+        company_intake:e
+      },
+      discrepancies:[],
+      confirmed_by_user:true,
+      uploaded_at:new Date().toISOString(),
+      verified_at:new Date().toISOString()
+    }).select().single();
+    if(docIns.error){
+      $('coMsg').innerHTML=msg('error','Company was saved, but the uploaded registration document could not be attached: '+esc(docIns.error.message));
+      return;
+    }
+    const vIns=await sb.from('eezicomply_vault_documents').insert({
+      user_id:state.user.id,
+      scope_type:'company',
+      company_id:companyId,
+      document_type:'company_registration',
+      display_name:docIns.data.display_name,
+      storage_path:state.pendingCompanyDoc.storage_path,
+      original_filename:state.pendingCompanyDoc.original_filename,
+      mime_type:state.pendingCompanyDoc.mime_type,
+      size_bytes:state.pendingCompanyDoc.size_bytes,
+      ai_read_status:'completed',
+      extracted_data:docIns.data.extracted_data,
+      discrepancies:[],
+      source_document_id:docIns.data.id,
+      is_current:true,
+      last_confirmed_at:new Date().toISOString()
+    }).select().single();
+    if(vIns.data){
+      await sb.from('eezicomply_documents').update({vault_document_id:vIns.data.id,is_vault_reference:true,vault_confirmed_at:new Date().toISOString()}).eq('id',docIns.data.id);
+      await sb.from('eezicomply_filing_vault_links').insert({user_id:state.user.id,filing_id:state.filing.id,vault_document_id:vIns.data.id,filing_document_id:docIns.data.id,status:'confirmed',confirmed_at:new Date().toISOString()});
+    }
+    state.pendingCompanyDoc=null;
+    state.pendingCompanyExtraction=null;
+  }
+
+  await refresh();
+  if(resumedOpenFiling){
+    state.step=Math.max(1,Math.min(10,state.filing.current_step||1));
+    renderApp();
+    toast('An in-progress filing already exists for this company. EeziComply opened it instead of creating a duplicate.');
+  }else{
+    toast('Company confirmed');
+    go(2);
+  }
+}
 
 function normEntity(v){return String(v||'').toLowerCase().replace(/[^a-z0-9]/g,'')}
 function vaultCandidates(){const used=new Set(state.docs.map(d=>d.vault_document_id).filter(Boolean)),refs=new Set(state.links.filter(l=>['trust','company','foreign_entity'].includes(l.owner_type)).map(l=>String(l.registration_or_reference||l.holder_identifier||'').toLowerCase()).filter(Boolean)),linkedCompanyIds=new Set(),personNames=new Set((state.links||[]).filter(l=>l.owner_type==='natural_person').map(l=>normEntity(l.owner_name)).filter(Boolean));(state.links||[]).filter(l=>l.owner_type==='company').forEach(l=>{const n=normEntity(l.owner_name),r=normEntity(l.registration_or_reference||l.holder_identifier);const k=(state.knownCompanies||[]).find(c=>(r&&normEntity(c.registration_number)===r)||(n&&normEntity(c.registered_name)===n));if(k)linkedCompanyIds.add(k.id)});return (state.vaultDocs||[]).filter(v=>{if(used.has(v.id))return false;if(v.scope_type==='personal')return true;if(v.scope_type==='company')return v.company_id===state.company?.id||linkedCompanyIds.has(v.company_id);if(v.scope_type==='entity')return !!(v.entity_reference&&refs.has(String(v.entity_reference).toLowerCase()));if(v.scope_type==='case_person'){const ps=Array.isArray(v.extracted_data?.people)?v.extracted_data.people:[];return ps.some(p=>personNames.has(normEntity(p?.name)))}return false})}
