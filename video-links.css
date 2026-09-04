@@ -122,8 +122,34 @@
 .tier-head h4{margin:0;color:#173f70;font-size:16px}
 .tier-head span{font-size:12px;font-weight:800;color:#f58220;white-space:nowrap}
 .tier-summary p{font-size:12px!important;min-height:0!important;margin-bottom:8px!important}
+.tier-summary>p{font-weight:800!important;color:#26384b!important}
 .tier-summary ul{margin:0!important}
 .tier-summary li{font-size:11.5px!important}
+.debt-positioning{
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  margin:4px 0 10px;
+}
+.debt-positioning strong{
+  font-size:18px;
+  color:#176946;
+  letter-spacing:-.02em;
+}
+.debt-positioning span{
+  display:inline-flex;
+  align-items:center;
+  min-height:25px;
+  padding:3px 9px;
+  border-radius:999px;
+  background:#e7f7ee;
+  color:#176946;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+}
 .debt-capability-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
