@@ -26,3 +26,25 @@
     gap:7px;
   }
 }
+
+/* Landing-page cleanup: use the full hero width and remove the redundant ecosystem graphic. */
+.hero-grid{
+  grid-template-columns:1fr !important;
+  gap:0 !important;
+}
+.hero-copy{
+  width:100%;
+  max-width:none !important;
+}
+.hero-copy h1{
+  max-width:900px;
+}
+.hero-copy .hero-lead{
+  max-width:1000px;
+}
+.product-family-ecosystem{
+  display:none !important;
+}
+.simplified-products .section-heading{
+  margin-bottom:24px;
+}
