@@ -125,6 +125,58 @@
 .tier-summary>p{font-weight:800!important;color:#26384b!important}
 .tier-summary ul{margin:0!important}
 .tier-summary li{font-size:11.5px!important}
+
+/* EeziDebt positioning: this is an individual product, not a business product. */
+.debt-expanded-card h3::after{
+  content:"Your Personal Financial Manager in your pocket.";
+  display:block;
+  margin-top:8px;
+  font-size:18px;
+  line-height:1.25;
+  font-weight:800;
+  color:#176946;
+  letter-spacing:-.02em;
+}
+.debt-expanded-card h3::before{
+  content:"FOR INDIVIDUALS • FREE";
+  display:inline-flex;
+  align-items:center;
+  min-height:25px;
+  margin-top:10px;
+  padding:3px 9px;
+  border-radius:999px;
+  background:#e7f7ee;
+  color:#176946;
+  font-size:10px;
+  line-height:1;
+  font-weight:850;
+  letter-spacing:.045em;
+  vertical-align:middle;
+  float:right;
+}
+.debt-expanded-card>p{
+  font-size:0!important;
+  line-height:0!important;
+}
+.debt-expanded-card>p::before{
+  content:"EeziDebt is built for the individual, not the business. It brings your income, expenses, debts, affordability and financial progress into one continuously updated personal view — helping you understand where you stand, improve debt outcomes and make better financial decisions over time.";
+  display:block;
+  max-width:1050px;
+  font-size:13px;
+  line-height:1.55;
+  color:#5f6f82;
+}
+.problem-grid article:nth-child(5) p{
+  font-size:0!important;
+  line-height:0!important;
+}
+.problem-grid article:nth-child(5) p::before{
+  content:"EeziDebt is free and built for the individual — your personal financial manager in your pocket, with a living view of income, expenses, debt and affordability.";
+  display:block;
+  font-size:12.5px;
+  line-height:1.5;
+  color:#607083;
+}
 .debt-positioning{
   display:flex;
   align-items:baseline;
@@ -167,4 +219,5 @@
 .debt-capability-grid span{font-size:11.5px;line-height:1.5;color:#5b6b78}
 @media(max-width:980px){
   .tier-grid,.debt-capability-grid{grid-template-columns:1fr}
+  .debt-expanded-card h3::before{float:none;margin-left:12px}
 }
