@@ -126,6 +126,14 @@
 .tier-summary ul{margin:0!important}
 .tier-summary li{font-size:11.5px!important}
 
+/* Package-defining first line on the three core enabler cards. */
+.product-card.accent-comply>p,
+.product-card.accent-fund>p,
+.product-card.accent-bid>p{
+  font-weight:800!important;
+  color:#26384b!important;
+}
+
 /* EeziDebt positioning: this is an individual product, not a business product. */
 .debt-expanded-card h3::after{
   content:"Your Personal Financial Manager in your pocket.";
