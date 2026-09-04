@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#102445">
+  <meta name="description" content="EeziFund helps South African SMEs prepare funding applications, understand funding readiness and assess fit across funding mandates for PO and contract finance, working capital and SME term or growth finance.">
+  <title>EeziFund | Find where your business fits</title>
+  <style>
+    :root{--navy:#102445;--blue:#173f70;--gold:#b88a2c;--gold2:#d7aa45;--ink:#243447;--muted:#667085;--line:#dfe5eb;--soft:#f7f8fa;--green:#23845f;--white:#fff}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--ink);line-height:1.5}a{text-decoration:none;color:inherit}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+    header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}.head{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font-size:26px;font-weight:900;letter-spacing:-.6px;color:var(--navy)}.brand span{color:var(--gold)}.back{font-size:13px;font-weight:700;color:var(--navy)}
+    .hero{padding:68px 0 54px;background:radial-gradient(circle at 88% 8%,rgba(184,138,44,.15),transparent 30%),linear-gradient(180deg,#fff,#fbfcfd)}.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:40px;align-items:center}.eyebrow{font-size:11px;letter-spacing:.1em;font-weight:900;color:var(--gold);margin-bottom:12px}h1{font-size:clamp(40px,5.4vw,62px);line-height:1.01;letter-spacing:-.045em;color:var(--navy);margin:0 0 18px}.lead{font-size:18px;color:#526176;max-width:700px;margin:0 0 24px}.actions{display:flex;flex-wrap:wrap;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:10px;font-size:14px;font-weight:800;border:1px solid var(--navy)}.btn.primary{background:var(--navy);color:#fff}.btn.secondary{color:var(--navy);background:#fff}.micro{margin-top:12px;color:var(--muted);font-size:12px}
+    .hero-card{background:var(--navy);color:#fff;border-radius:20px;padding:28px;box-shadow:0 18px 40px rgba(16,36,69,.15)}.hero-card h2{font-size:25px;margin:0 0 8px}.hero-card p{margin:0 0 18px;color:#dce5f0}.flow{display:grid;gap:0}.flow div{display:grid;grid-template-columns:32px 1fr;gap:11px;align-items:center;padding:11px 0;border-top:1px solid #ffffff20}.flow b{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--gold);font-size:11px}.flow span{font-size:13px}.free-chip{display:inline-flex;margin-top:18px;padding:7px 10px;border-radius:999px;background:#ffffff14;border:1px solid #ffffff28;font-size:12px;font-weight:800}
+    .section{padding:52px 0}.section.soft{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.section h2{font-size:31px;color:var(--navy);margin:0 0 8px;letter-spacing:-.02em}.section-intro{color:var(--muted);max-width:800px;margin:0 0 26px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 6px 20px rgba(23,63,112,.05)}.card .icon{width:38px;height:38px;border-radius:10px;background:#fff7e7;color:#9b711e;display:grid;place-items:center;font-weight:900;margin-bottom:14px}.card h3{color:var(--navy);font-size:19px;margin:0 0 8px}.card p{font-size:13px;color:var(--muted);margin:0}.card ul{padding-left:18px;color:#59697b;font-size:12px;margin:12px 0 0}.card li{margin:5px 0}
+    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.step{border:1px solid var(--line);border-radius:14px;padding:17px;background:#fff}.step b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;margin-bottom:12px}.step strong{display:block;color:var(--navy);font-size:14px;margin-bottom:5px}.step span{font-size:12px;color:var(--muted)}
+    .truth{display:grid;grid-template-columns:1fr 1fr;gap:18px}.truth-card{padding:22px;border-radius:16px;border:1px solid var(--line);background:#fff}.truth-card h3{margin:0 0 10px;color:var(--navy)}.truth-card p{font-size:13px;color:var(--muted);margin:0}.truth-card.good{border-left:5px solid var(--green)}.truth-card.note{border-left:5px solid var(--gold)}
+    .cta{padding:34px;border-radius:20px;background:linear-gradient(135deg,var(--navy),#173f70);color:#fff;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}.cta h2{color:#fff;margin:0 0 8px}.cta p{margin:0;color:#dce5f0;max-width:700px}.cta .btn{border-color:#fff;background:#fff;color:var(--navy)}
+    footer{padding:28px 0 36px}.footer{display:flex;justify-content:space-between;gap:16px;align-items:center;border-top:1px solid var(--line);padding-top:22px;color:#708094;font-size:12px}
+    @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.grid3{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.cta{grid-template-columns:1fr}}
+    @media(max-width:620px){.wrap{width:min(100% - 28px,1120px)}.head{height:66px}.brand{font-size:23px}.hero{padding:44px 0 36px}.lead{font-size:16px}.grid3,.steps,.truth{grid-template-columns:1fr}.section{padding:40px 0}.section h2{font-size:27px}.footer{align-items:flex-start;flex-direction:column}.btn{width:100%}}
+  </style>
+</head>
+<body>
+<header><div class="wrap head"><a class="brand" href="/"><b>Eezi</b><span>Fund</span></a><a class="back" href="/">← EeziNess</a></div></header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">SME FUNDING READINESS • MATCHING • CONTROLLED ROUTING</div>
+      <h1>Find where your<br>business fits.</h1>
+      <p class="lead">EeziFund helps South African SMEs prepare a funding application, understand what may be holding it back and assess fit across a growing universe of funding mandates — without having to start from scratch for every funder.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:mzamok@naselacapital.com?subject=EeziFund%20pilot%20application">Join the EeziFund pilot</a>
+        <a class="btn secondary" href="#how">See how it works</a>
+      </div>
+      <div class="micro">Free for SMEs. EeziFund is not a lender and does not guarantee funding approval.</div>
+    </div>
+    <aside class="hero-card">
+      <div class="eyebrow" style="color:#f4cf7e">ONE APPLICATION. BETTER FUNDING FIT.</div>
+      <h2>Start with the funding need.</h2>
+      <p>EeziFund structures the application, checks readiness and assesses relevant funding mandates before any controlled referral.</p>
+      <div class="flow">
+        <div><b>1</b><span>Tell us about the business and the funding you need</span></div>
+        <div><b>2</b><span>Upload the supporting information once</span></div>
+        <div><b>3</b><span>See readiness gaps and potential mandate fit</span></div>
+        <div><b>4</b><span>Where appropriate, EeziFund can route to participating funding partners</span></div>
+      </div>
+      <span class="free-chip">No applicant application or matching fee</span>
+    </aside>
+  </div>
+</section>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">THREE LAUNCH FUNDING PATHWAYS</div>
+      <h2>Funding is bigger than purchase orders.</h2>
+      <p class="section-intro">EeziFund started with purchase-order finance, but SMEs need a broader funding route. The platform now supports three initial funding pathways while the funder and mandate universe continues to expand.</p>
+      <div class="grid3">
+        <article class="card"><div class="icon">PO</div><h3>PO & Contract Finance</h3><p>Funding linked to a credible purchase order, awarded contract or defined transaction.</p><ul><li>Transaction economics</li><li>Buyer / issuer assessment inputs</li><li>Supplier and delivery information</li></ul></article>
+        <article class="card"><div class="icon">WC</div><h3>Working Capital</h3><p>Funding to support the operating cycle where cash is tied up in customers, stock or day-to-day growth.</p><ul><li>Bank-statement evidence</li><li>Management accounts</li><li>Debtors / creditors information</li></ul></article>
+        <article class="card"><div class="icon">TG</div><h3>SME Term & Growth Finance</h3><p>Term funding for expansion, equipment-light growth initiatives or other defined business funding needs.</p><ul><li>Funding purpose and term</li><li>Trading and turnover profile</li><li>Profitability and existing debt</li></ul></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="how">
+    <div class="wrap">
+      <div class="eyebrow">HOW EEZIFUND WORKS</div>
+      <h2>Prepare once. Improve the application. Match intelligently.</h2>
+      <p class="section-intro">The aim is not to send the same application everywhere. EeziFund uses structured information and funding criteria to identify where there may be a fit and what needs to improve where there is not.</p>
+      <div class="steps">
+        <div class="step"><b>1</b><strong>Business profile</strong><span>Capture the core company and trading information once.</span></div>
+        <div class="step"><b>2</b><strong>Funding need</strong><span>Choose PO / contract, working capital or term / growth finance.</span></div>
+        <div class="step"><b>3</b><strong>Documents</strong><span>Upload relevant evidence and reuse current documents on later applications.</span></div>
+        <div class="step"><b>4</b><strong>Readiness & matching</strong><span>See gaps, strengths and mandate-level funding potential.</span></div>
+        <div class="step"><b>5</b><strong>Controlled routing</strong><span>Eligible applications can be referred only to participating, activated funding partners.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="eyebrow">WHAT MAKES THE MODEL DIFFERENT</div>
+      <h2>Useful even before a funder says yes.</h2>
+      <p class="section-intro">A funding application should tell the SME more than whether one lender approved or declined it.</p>
+      <div class="truth">
+        <div class="truth-card good"><h3>Funding intelligence for the SME</h3><p>EeziFund can identify strengths, missing information and mandate-related blockers so the SME understands what may improve fundability rather than receiving only a yes or no.</p></div>
+        <div class="truth-card note"><h3>Privacy and routing remain separate</h3><p>EeziFund may use broader market and mandate intelligence to assess fit. Applicant information is only routed where the funding partner is participating, its mandate is confirmed and routing has been explicitly activated.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft">
+    <div class="wrap">
+      <div class="eyebrow">TRANSPARENT BY DESIGN</div>
+      <h2>EeziFund helps you navigate funding. It does not make the credit decision.</h2>
+      <div class="grid3">
+        <article class="card"><h3>Free for applicants</h3><p>EeziFund does not charge SMEs a registration, application or matching fee. The commercial model is intended to be funded through referral or partner economics where applicable.</p></article>
+        <article class="card"><h3>Funders decide</h3><p>Funding partners retain their own credit, pricing, legal, security and approval discretion. A potential match is not an approval or offer.</p></article>
+        <article class="card"><h3>Your application stays controlled</h3><p>A researched or potentially suitable funder does not automatically receive your information. Routing is a separate controlled step.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta">
+        <div><h2>Need funding but not sure where you fit?</h2><p>Join the EeziFund pilot. We are currently onboarding SMEs across PO / contract finance, working capital and SME term / growth finance.</p></div>
+        <a class="btn" href="mailto:mzamok@naselacapital.com?subject=EeziFund%20pilot%20application">Join the pilot →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap footer"><span>EeziFund is an EeziNess enabler developed by Nasela Capital.</span><span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/">EeziNess</a></span></div></footer>
+</body>
+</html>
