@@ -67,9 +67,20 @@
   margin-bottom:24px;
 }
 
-/* Full-width problem-led hero — remove the former right-side colour block. */
-.hero{
-  background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%) !important;
+/* Keep the website canvas clean white. */
+html,
+body,
+main,
+.hero,
+.why-section,
+.simplified-why,
+.products-section,
+.specialist-section,
+.about-section,
+.contact-section,
+.platform-section{
+  background:#ffffff !important;
+  background-image:none !important;
 }
 
 /* Render the actual South African flag from an image asset rather than relying on emoji glyph support. */
