@@ -26,6 +26,66 @@
       "source": "/eezifinance/",
       "destination": "https://eezifinance.vercel.app/signup",
       "permanent": false
+    },
+    {
+      "source": "/eezifund",
+      "destination": "https://eezifund-platform-preview.vercel.app/applicant.html",
+      "permanent": false
+    },
+    {
+      "source": "/eezifund/",
+      "destination": "https://eezifund-platform-preview.vercel.app/applicant.html",
+      "permanent": false
+    },
+    {
+      "source": "/eezibid",
+      "destination": "https://eezibid.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezibid/",
+      "destination": "https://eezibid.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezinpo",
+      "destination": "https://eezinpo-pilot.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezinpo/",
+      "destination": "https://eezinpo-pilot.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezidebt",
+      "destination": "https://eezidebt-financial-wellness-staging.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezidebt/",
+      "destination": "https://eezidebt-financial-wellness-staging.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezicomply",
+      "destination": "https://eezicomply-suite-mvp.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezicomply/",
+      "destination": "https://eezicomply-suite-mvp.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezirisk",
+      "destination": "https://eezirisk-pilot.vercel.app",
+      "permanent": false
+    },
+    {
+      "source": "/eezirisk/",
+      "destination": "https://eezirisk-pilot.vercel.app",
+      "permanent": false
     }
   ]
 }
