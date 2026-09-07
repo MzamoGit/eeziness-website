@@ -29,12 +29,12 @@
     },
     {
       "source": "/eezifund",
-      "destination": "https://eezifund-platform-preview.vercel.app/applicant.html",
+      "destination": "https://eezifund-platform-preview.vercel.app/",
       "permanent": false
     },
     {
       "source": "/eezifund/",
-      "destination": "https://eezifund-platform-preview.vercel.app/applicant.html",
+      "destination": "https://eezifund-platform-preview.vercel.app/",
       "permanent": false
     },
     {
