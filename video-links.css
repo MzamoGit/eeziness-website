@@ -185,16 +185,15 @@ main,
   line-height:1.55;
   color:#5f6f82;
 }
+/* Keep the real EeziDebt markup visible so its wordmark styles match the other enablers. */
 .problem-grid article:nth-child(5) p{
-  font-size:0!important;
-  line-height:0!important;
-}
-.problem-grid article:nth-child(5) p::before{
-  content:"EeziDebt is free and built for the individual — your personal financial manager in your pocket, with a living view of income, expenses, debt and affordability.";
-  display:block;
   font-size:12.5px;
   line-height:1.5;
   color:#607083;
+}
+.problem-grid article:nth-child(5) p::before{
+  content:none;
+  display:none;
 }
 .debt-positioning{
   display:flex;
