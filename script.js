@@ -1,3 +1,17 @@
+
+// Enforce EeziDebt wordmark treatment wherever it appears.
+document.querySelectorAll('.enabler-wordmark.name-debt').forEach((wordmark) => {
+  const parts = wordmark.querySelectorAll(':scope > span');
+  if (parts[0]) {
+    parts[0].style.setProperty('color', '#173f70', 'important');
+    parts[0].style.setProperty('font-weight', '800', 'important');
+  }
+  if (parts[1]) {
+    parts[1].style.setProperty('color', '#2fa66a', 'important');
+    parts[1].style.setProperty('font-weight', '800', 'important');
+  }
+});
+
 const toggle = document.querySelector('.nav-toggle');
 const nav = document.querySelector('.nav');
 if (toggle && nav) {
