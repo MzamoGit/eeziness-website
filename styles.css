@@ -602,3 +602,14 @@ h3{letter-spacing:-.025em}
   .problem-grid article{min-height:0}
   .connected-block{padding:22px 18px}
 }
+
+
+/* EeziDebt wordmark: keep styling consistent with the other Eezi enablers */
+.problem-grid .enabler-wordmark.name-debt > span:first-child{
+  color:#173f70!important;
+  font-weight:800!important;
+}
+.problem-grid .enabler-wordmark.name-debt > span:last-child{
+  color:#2fa66a!important;
+  font-weight:800!important;
+}
