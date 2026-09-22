@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EeziComply Sample Filing Pack</title>
+  <meta name="description" content="View the EeziComply beneficial ownership sample filing pack.">
+  <style>
+    html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
+    #status{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+    .box{max-width:560px;background:#fff;border:1px solid #dbe1ea;border-radius:14px;padding:28px;box-shadow:0 10px 30px rgba(16,36,69,.08)}
+    h1{color:#102445;font-size:24px;margin:0 0 12px}.muted{color:#667085;line-height:1.5}
+    iframe{display:none;width:100%;height:100%;border:0;background:#fff}
+    a{color:#102445;font-weight:700}
+  </style>
+</head>
+<body>
+<div id="status"><div class="box"><h1>EeziComply Sample Filing Pack</h1><p class="muted">Opening the illustrative sample pack…</p></div></div>
+<iframe id="viewer" title="EeziComply Sample Filing Pack"></iframe>
+<script src="/eezicomply/sample-data-v2-1.js"></script>
+<script src="/eezicomply/sample-data-v2-2.js"></script>
+<script src="/eezicomply/sample-data-v2-3.js"></script>
+<script src="/eezicomply/sample-data-v2-4.js"></script>
+<script>
+(async()=>{
+  const status=document.getElementById('status'),viewer=document.getElementById('viewer');
+  try{
+    if(!window.__eeziSampleV2) throw new Error('Sample data unavailable');
+    const raw=atob(window.__eeziSampleV2),bytes=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
+    if(typeof DecompressionStream!=='function') throw new Error('This browser cannot open the compressed sample directly. Please use a current Chrome, Edge, Safari or Firefox browser.');
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const pdfBytes=await new Response(stream).arrayBuffer();
+    const blob=new Blob([pdfBytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    viewer.src=url;viewer.style.display='block';status.style.display='none';
+    window.addEventListener('beforeunload',()=>URL.revokeObjectURL(url),{once:true});
+  }catch(e){
+    console.error(e);
+    status.innerHTML='<div class="box"><h1>Sample pack could not be opened</h1><p class="muted">'+String(e.message||e)+'</p><p><a href="/eezicomply">Return to EeziComply</a></p></div>';
+  }
+})();
+</script>
+</body>
+</html>
