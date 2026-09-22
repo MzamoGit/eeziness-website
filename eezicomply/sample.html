@@ -2,42 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <title>EeziComply Sample Filing Pack</title>
   <meta name="description" content="View the EeziComply beneficial ownership sample filing pack.">
   <style>
-    html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
-    #status{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+    *{box-sizing:border-box}html,body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#172033}
+    .top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #dbe1ea;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{font-weight:800;font-size:20px;color:#102445}.brand span{color:#b88a2c}.top small{color:#667085}
+    #status{min-height:75vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
     .box{max-width:560px;background:#fff;border:1px solid #dbe1ea;border-radius:14px;padding:28px;box-shadow:0 10px 30px rgba(16,36,69,.08)}
     h1{color:#102445;font-size:24px;margin:0 0 12px}.muted{color:#667085;line-height:1.5}
-    iframe{display:none;width:100%;height:100%;border:0;background:#fff}
-    a{color:#102445;font-weight:700}
+    #pages{max-width:900px;margin:18px auto;padding:0 10px 30px}
+    .page{background:#fff;margin:0 auto 18px;box-shadow:0 4px 20px #10244520;border:1px solid #dbe1ea}
+    .page canvas{display:block;width:100%;height:auto}
+    .actions{display:flex;gap:8px;align-items:center}.btn{border:0;border-radius:8px;padding:9px 12px;font-weight:700;text-decoration:none;cursor:pointer;background:#102445;color:#fff;font-size:13px}
+    @media(max-width:600px){.top{padding:10px 12px}.brand{font-size:18px}.top small{display:none}#pages{margin-top:10px;padding:0 4px 20px}.page{margin-bottom:8px;border-left:0;border-right:0}}
   </style>
 </head>
 <body>
-<div id="status"><div class="box"><h1>EeziComply Sample Filing Pack</h1><p class="muted">Opening the illustrative sample pack…</p></div></div>
-<iframe id="viewer" title="EeziComply Sample Filing Pack"></iframe>
+<header class="top"><div><div class="brand">Eezi<span>Comply</span></div><small>Sample beneficial ownership filing pack</small></div><div class="actions"><button class="btn" id="downloadBtn">Download PDF</button></div></header>
+<div id="status"><div class="box"><h1>EeziComply Sample Filing Pack</h1><p class="muted">Loading the sample pack…</p></div></div>
+<main id="pages" hidden></main>
 <script src="/eezicomply/sample-data-v2-1.js"></script>
 <script src="/eezicomply/sample-data-v2-2.js"></script>
 <script src="/eezicomply/sample-data-v2-3.js"></script>
 <script src="/eezicomply/sample-data-v2-4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 (async()=>{
-  const status=document.getElementById('status'),viewer=document.getElementById('viewer');
+  const status=document.getElementById('status'),pages=document.getElementById('pages'),downloadBtn=document.getElementById('downloadBtn');
+  let pdfBlobUrl=null;
   try{
     if(!window.__eeziSampleV2) throw new Error('Sample data unavailable');
-    const raw=atob(window.__eeziSampleV2),bytes=new Uint8Array(raw.length);
-    for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
-    if(typeof DecompressionStream!=='function') throw new Error('This browser cannot open the compressed sample directly. Please use a current Chrome, Edge, Safari or Firefox browser.');
-    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const pdfBytes=await new Response(stream).arrayBuffer();
-    const blob=new Blob([pdfBytes],{type:'application/pdf'});
-    const url=URL.createObjectURL(blob);
-    viewer.src=url;viewer.style.display='block';status.style.display='none';
-    window.addEventListener('beforeunload',()=>URL.revokeObjectURL(url),{once:true});
+    const raw=atob(window.__eeziSampleV2),gz=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++) gz[i]=raw.charCodeAt(i);
+    if(typeof DecompressionStream!=='function') throw new Error('Please open this page in a current version of Chrome, Edge, Safari or Firefox.');
+    const stream=new Blob([gz]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const pdfBytes=new Uint8Array(await new Response(stream).arrayBuffer());
+    pdfBlobUrl=URL.createObjectURL(new Blob([pdfBytes],{type:'application/pdf'}));
+    downloadBtn.onclick=()=>{const a=document.createElement('a');a.href=pdfBlobUrl;a.download='EeziComply-Sample-UBO-Filing-Pack.pdf';document.body.appendChild(a);a.click();a.remove()};
+    if(!window.pdfjsLib) throw new Error('The mobile document viewer could not load. Please refresh and try again.');
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:pdfBytes}).promise;
+    pages.hidden=false;status.style.display='none';
+    const targetWidth=Math.min(900,Math.max(320,window.innerWidth-8));
+    for(let n=1;n<=pdf.numPages;n++){
+      const page=await pdf.getPage(n),base=page.getViewport({scale:1}),scale=targetWidth/base.width,viewport=page.getViewport({scale});
+      const wrap=document.createElement('section');wrap.className='page';
+      const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{alpha:false});
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      canvas.width=Math.floor(viewport.width*dpr);canvas.height=Math.floor(viewport.height*dpr);
+      canvas.style.width=viewport.width+'px';canvas.style.height=viewport.height+'px';
+      wrap.appendChild(canvas);pages.appendChild(wrap);
+      await page.render({canvasContext:ctx,viewport,transform:dpr!==1?[dpr,0,0,dpr,0,0]:null}).promise;
+    }
+    window.addEventListener('beforeunload',()=>{if(pdfBlobUrl)URL.revokeObjectURL(pdfBlobUrl)},{once:true});
   }catch(e){
-    console.error(e);
-    status.innerHTML='<div class="box"><h1>Sample pack could not be opened</h1><p class="muted">'+String(e.message||e)+'</p><p><a href="/eezicomply">Return to EeziComply</a></p></div>';
+    console.error(e);status.style.display='flex';pages.hidden=true;
+    status.innerHTML='<div class="box"><h1>Sample pack could not be displayed</h1><p class="muted">'+String(e.message||e)+'</p><p class="muted">Please refresh the page. If the problem persists, open it in Chrome or Edge.</p></div>';
   }
 })();
 </script>
