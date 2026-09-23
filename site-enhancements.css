@@ -19,7 +19,7 @@
 .trust-human .trust-graphic:after{content:"+  AI  ✓";margin-left:9px;padding:5px 8px;border-radius:8px;background:#f3efe5;border:1px solid #d7c28f;color:#6a5120;font-size:10px;font-weight:800;letter-spacing:.03em}
 
 /* Replace the old EeziManOS visual with a straightforward system architecture */
-.platform-visual{min-height:310px!important;overflow:hidden!important;padding:14px!important;background:#eef1f2!important}
+.platform-visual{min-height:310px!important;overflow:hidden!important;padding:14px!important;background:#fff!important}
 .manos-shell{position:relative!important;width:100%!important;height:auto!important;min-height:280px!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-areas:"strategy risk stakeholders compliance" "core core core core" "exec exec board board"!important;gap:10px!important;align-content:center!important;padding:30px 4px 4px!important}
 .manos-caption{position:absolute!important;left:50%!important;top:4px!important;transform:translateX(-50%)!important;font-size:8px!important;font-weight:800!important;letter-spacing:.12em!important;color:#71808a!important;text-transform:uppercase!important;white-space:nowrap!important}
 .manos-lines{display:none!important}
@@ -32,8 +32,8 @@
 .manos-core{grid-area:core!important;min-height:92px!important;border-radius:14px!important;background:linear-gradient(135deg,#263844,#415768)!important;color:#fff!important;display:grid!important;place-content:center!important;text-align:center!important;box-shadow:0 10px 22px rgba(38,56,68,.16)!important;border:1px solid #263844!important}
 .manos-core:before{content:"SHARED ORGANISATIONAL DATA + AI INTELLIGENCE";font-size:7.5px;font-weight:800;letter-spacing:.11em;color:#bfcbd2;margin-bottom:6px}
 .manos-core strong{font-size:20px!important;letter-spacing:-.03em!important}.manos-core small{font-size:9px!important;margin-top:4px!important;color:#dbe4e9!important;font-weight:600!important}
-.node-exec{grid-area:exec!important;background:#f5f7f8!important;border:1px solid #8fa0aa!important;border-left:5px solid #355f7a!important;font-size:10.5px!important}
-.node-board{grid-area:board!important;background:#f5f4ef!important;border:1px solid #b7a47b!important;border-left:5px solid #8b6a31!important;font-size:10.5px!important}
+.node-exec{grid-area:exec!important;background:#fff!important;border:1px solid #8fa0aa!important;border-left:5px solid #355f7a!important;font-size:10.5px!important}
+.node-board{grid-area:board!important;background:#fff!important;border:1px solid #b7a47b!important;border-left:5px solid #8b6a31!important;font-size:10.5px!important}
 
 /* Founder wording — exact attribution requested */
 .about-copy p:nth-of-type(2){font-size:0!important;line-height:0!important}
