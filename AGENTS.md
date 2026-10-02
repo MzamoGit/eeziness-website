@@ -52,3 +52,8 @@ Never claim fixed, passed, signed, verified, ready or complete without that evid
 ## New Eezi applications
 
 Any new Eezi repository must include this file before feature development or UAT begins.
+
+
+## Eezi-wide document signature and date placement
+
+Any current or future feature that generates, assembles, or signs a document with a signature or date must follow the Eezi-wide measured-line standard documented in [EeziComply](https://github.com/MzamoGit/eezicomply/blob/main/docs/EEZI_DOCUMENT_SIGNING_STANDARD.md). Use measured anchors and a shared signer, fail closed on invalid page/line geometry or text overflow, and do not add template-specific fixed offsets. Products without signable documents have no placement code to migrate; apply this rule before adding such a feature. Automated checks and visual inspection of generated signed output are required before release.
