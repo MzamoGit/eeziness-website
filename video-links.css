@@ -146,7 +146,14 @@ main,
 }
 
 /* EeziDebt positioning: this is an individual product, not a business product. */
+.debt-expanded-card h3{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.debt-expanded-card h3>.enabler-wordmark{order:0}
 .debt-expanded-card h3::after{
+  order:2;
   content:"Your Personal Financial Manager in your pocket.";
   display:block;
   margin-top:8px;
@@ -157,6 +164,8 @@ main,
   letter-spacing:-.02em;
 }
 .debt-expanded-card h3::before{
+  order:1;
+  align-self:flex-start;
   content:"FOR INDIVIDUALS • FREE";
   display:inline-flex;
   align-items:center;
@@ -171,7 +180,7 @@ main,
   font-weight:850;
   letter-spacing:.045em;
   vertical-align:middle;
-  float:right;
+  float:none;
 }
 .debt-expanded-card>p{
   font-size:0!important;
@@ -253,5 +262,4 @@ main,
 
 @media(max-width:980px){
   .tier-grid,.debt-capability-grid{grid-template-columns:1fr}
-  .debt-expanded-card h3::before{float:none;margin-left:12px}
 }
