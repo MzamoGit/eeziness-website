@@ -95,6 +95,16 @@
       "source": "/eezirisk/",
       "destination": "https://eezirisk-pilot.vercel.app",
       "permanent": false
+    },
+    {
+      "source": "/seanda",
+      "destination": "https://seanda.eeziness.co.za",
+      "permanent": false
+    },
+    {
+      "source": "/seanda/:path*",
+      "destination": "https://seanda.eeziness.co.za/:path*",
+      "permanent": false
     }
   ]
 }
