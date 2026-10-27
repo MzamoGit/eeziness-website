@@ -27,6 +27,31 @@
   ],
   "redirects": [
     {
+      "source": "/install/eezifund",
+      "destination": "https://eezifund-platform-preview.vercel.app/install.html",
+      "permanent": false
+    },
+    {
+      "source": "/install/eezifinance",
+      "destination": "https://eezifinance.vercel.app/install.html",
+      "permanent": false
+    },
+    {
+      "source": "/install/eezicomply",
+      "destination": "https://eezicomply-suite-mvp.vercel.app/install.html",
+      "permanent": false
+    },
+    {
+      "source": "/install/eezinpo",
+      "destination": "https://eezinpo-pilot.vercel.app/install.html",
+      "permanent": false
+    },
+    {
+      "source": "/install/eezidebt",
+      "destination": "https://eezidebt-financial-wellness-staging.vercel.app/install.html",
+      "permanent": false
+    },
+    {
       "source": "/eezifinance",
       "destination": "https://eezifinance.vercel.app/signup",
       "permanent": false
